@@ -156,7 +156,7 @@ ehthumbs.db
 Thumbs.db
 *.swp
 *.swo
-.db
+
 
 # Railway specific (if you store any local config)
 .railway/
@@ -165,3 +165,9 @@ railway.json
 # Secret keys / sensitive data
 config_local.py
 .secret_key
+
+
+instance/
+*.db
+*.sqlite
+*.sqlite3
