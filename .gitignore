@@ -156,6 +156,7 @@ ehthumbs.db
 Thumbs.db
 *.swp
 *.swo
+.db
 
 # Railway specific (if you store any local config)
 .railway/
