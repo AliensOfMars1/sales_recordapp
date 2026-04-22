@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Record Sale{% endblock %}
+{% block page_title %}Record New Sale{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/helper.css') }}">
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // For each barber form, set up service price auto-fill
+    $('.barber-form-card').each(function() {
+        var $form = $(this);
+        var $serviceSelect = $form.find('.service-select');
+        var $amountInput = $form.find('.amount-input');
+
+        $serviceSelect.on('change', function() {
+            var serviceId = $(this).val();
+            if (serviceId) {
+                $.getJSON('/sales/get-service-price/' + serviceId, function(data) {
+                    $amountInput.val(data.price);
+                });
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>
+            Each barber has their own form – just fill and submit. Horizontal scroll if many barbers.
+        </div>
+    </div>
+</div>
+
+<div class="barber-forms-container">
+    {% for barber in barbers %}
+    <div class="barber-form-card">
+        <div class="card h-100">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-user me-2"></i>{{ barber.name }}
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('sales.record_sale') }}">
+                    {{ form.hidden_tag() }}
+                    <!-- Hidden barber_id for this form -->
+                    <input type="hidden" name="barber_id" value="{{ barber.id }}">
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Service</label>
+                        <select name="service_id" class="form-select service-select" required>
+                            <option value="">Select service</option>
+                            {% for service in services %}
+                            <option value="{{ service.id }}" data-price="{{ service.default_price }}">
+                                {{ service.name }} - GH₵{{ "%.2f"|format(service.default_price) }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Amount (GH₵)</label>
+                        <input type="number" name="amount" class="form-control amount-input" step="0.01" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Payment Method</label>
+                        <select name="payment_method" class="form-select" required>
+                            <option value="cash">Cash</option>
+                            <option value="momo">Mobile Money (MoMo)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Sale Date</label>
+                        <input type="date" name="sale_date" class="form-control" value="{{ today_date }}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Notes</label>
+                        <textarea name="notes" class="form-control" rows="2"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-save me-2"></i>Record Sale
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-warning">No active barbers found. Please add barbers first.</div>
+    {% endfor %}
+</div>
+{% endblock %}

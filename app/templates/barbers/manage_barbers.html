@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Barbers{% endblock %}
+{% block page_title %}Barber Management{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Add New Barber</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        {{ form.name.label(class="form-label") }}
+                        {{ form.name(class="form-control") }}
+                        {% for error in form.name.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.phone.label(class="form-label") }}
+                        {{ form.phone(class="form-control") }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.email.label(class="form-label") }}
+                        {{ form.email(class="form-control") }}
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        {{ form.active(class="form-check-input") }}
+                        {{ form.active.label(class="form-check-label") }}
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-user-plus me-2"></i>Add Barber
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5>Current Barbers</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for barber in barbers %}
+                            <tr>
+                                <form method="POST" action="{{ url_for('barbers.edit_barber', barber_id=barber.id) }}" style="display: inline;">
+                                    <td><input type="text" name="name" value="{{ barber.name }}" class="form-control form-control-sm"></td>
+                                    <td><input type="text" name="phone" value="{{ barber.phone or '' }}" class="form-control form-control-sm"></td>
+                                    <td><input type="email" name="email" value="{{ barber.email or '' }}" class="form-control form-control-sm"></td>
+                                    <td>
+                                        <select name="active" class="form-select form-select-sm">
+                                            <option value="true" {% if barber.active %}selected{% endif %}>Active</option>
+                                            <option value="false" {% if not barber.active %}selected{% endif %}>Inactive</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button type="submit" class="btn btn-sm btn-warning">Update</button>
+                                        <a href="{{ url_for('barbers.delete_barber', barber_id=barber.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Delete this barber? This will also delete all their sales records!')">Delete</a>
+                                    </td>
+                                </form>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

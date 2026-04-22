@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Sale{% endblock %}
+{% block page_title %}Edit Sale Record{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Auto-fill price when service changes
+    $('#service_id').change(function() {
+        var serviceId = $(this).val();
+        if (serviceId) {
+            $.getJSON('/sales/get-service-price/' + serviceId, function(data) {
+                $('#amount').val(data.price);
+            });
+        }
+    });
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Edit Sale #{{ sale.id }}</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Barber</label>
+                        <select name="barber_id" class="form-select" required>
+                            {% for barber in barbers %}
+                            <option value="{{ barber.id }}" {% if barber.id == sale.barber_id %}selected{% endif %}>
+                                {{ barber.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Service</label>
+                        <select name="service_id" id="service_id" class="form-select" required>
+                            {% for service in services %}
+                            <option value="{{ service.id }}" data-price="{{ service.default_price }}" {% if service.id == sale.service_id %}selected{% endif %}>
+                                {{ service.name }} - ₵{{ "%.2f"|format(service.default_price) }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Amount (₵)</label>
+                        <input type="number" name="amount" id="amount" class="form-control" step="0.01" value="{{ sale.amount }}" required>
+                        <small class="text-muted">Amount in Ghana Cedis</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Payment Method</label>
+                        <select name="payment_method" class="form-select" required>
+                            <option value="cash" {% if sale.payment_method == 'cash' %}selected{% endif %}>Cash</option>
+                            <option value="momo" {% if sale.payment_method == 'momo' %}selected{% endif %}>Mobile Money (MoMo)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Sale Date</label>
+                        <input type="date" name="sale_date" class="form-control" value="{{ sale.sale_date.strftime('%Y-%m-%d') }}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Notes</label>
+                        <textarea name="notes" class="form-control" rows="3">{{ sale.notes or '' }}</textarea>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('sales.list_sales') }}" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

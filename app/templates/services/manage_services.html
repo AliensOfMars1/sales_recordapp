@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Services{% endblock %}
+{% block page_title %}Services Management{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Add New Service</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        {{ form.name.label(class="form-label") }}
+                        {{ form.name(class="form-control") }}
+                        {% for error in form.name.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.default_price.label(class="form-label") }}
+                        {{ form.default_price(class="form-control", step="0.01") }}
+                        {% for error in form.default_price.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.description.label(class="form-label") }}
+                        {{ form.description(class="form-control", rows="3") }}
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        {{ form.active(class="form-check-input") }}
+                        {{ form.active.label(class="form-check-label") }}
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-plus me-2"></i>Add Service
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5>Current Services</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for service in services %}
+                            <tr>
+                                <form method="POST" action="{{ url_for('services.edit_service', service_id=service.id) }}" style="display: inline;">
+                                    <td><input type="text" name="name" value="{{ service.name }}" class="form-control form-control-sm"></td>
+                                    <td><input type="number" name="default_price" value="{{ service.default_price }}" step="0.01" class="form-control form-control-sm"></td>
+                                    <td><input type="text" name="description" value="{{ service.description or '' }}" class="form-control form-control-sm"></td>
+                                    <td>
+                                        <select name="active" class="form-select form-select-sm">
+                                            <option value="true" {% if service.active %}selected{% endif %}>Active</option>
+                                            <option value="false" {% if not service.active %}selected{% endif %}>Inactive</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button type="submit" class="btn btn-sm btn-warning">Update</button>
+                                        <a href="{{ url_for('services.delete_service', service_id=service.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Delete this service?')">Delete</a>
+                                    </td>
+                                </form>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

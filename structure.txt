@@ -1,0 +1,55 @@
+barbershop_app/
+├── app/
+│   ├── __init__.py
+│   ├── models.py
+│   ├── forms.py
+│   ├── extensions.py
+│   ├── auth/
+│   │   ├── __init__.py
+│   │   └── routes.py
+│   ├── main/
+│   │   ├── __init__.py
+│   │   └── routes.py
+│   ├── sales/
+│   │   ├── __init__.py
+│   │   └── routes.py
+│   ├── services/
+│   │   ├── __init__.py
+│   │   └── routes.py
+│   ├── expenses/
+│   │   ├── __init__.py
+│   │   └── routes.py
+│   ├── barbers/
+│   │   ├── __init__.py
+│   │   └── routes.py
+│   ├── reports/
+│   │   ├── __init__.py
+│   │   └── routes.py
+│   ├── templates/
+│   │   ├── base.html
+│   │   ├── index.html
+│   │   ├── about.html
+│   │   ├── admin_login.html
+│   │   ├── dashboard.html
+│   │   ├── sales/
+│   │   │   └── record_sale.html
+│   │   ├── expenses/
+│   │   │   └── expenses.html
+│   │   ├── services/
+│   │   │   └── manage_services.html
+│   │   ├── barbers/
+│   │   │   └── manage_barbers.html
+│   │   ├── borrow/
+│   │   │   └── borrow_record.html
+│   │   └── reports/
+│   │       ├── daily_sales.html
+│   │       ├── weekly_commission.html
+│   │       └── expenses_report.html
+│   └── static/
+│       └── css/
+│           └── style.css
+├── config.py
+├── run.py
+├── requirements.txt
+└── instance/
+    └── barbershop.db (auto-created)

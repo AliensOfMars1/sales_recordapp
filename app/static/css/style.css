@@ -1,0 +1,47 @@
+/* Custom styles for Barbershop Management System */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.stat-card {
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.sidebar .nav-link i {
+    width: 25px;
+}
+
+.table th {
+    background-color: #f8f9fa;
+}
+
+.btn-group-sm > .btn, .btn-sm {
+    padding: 0.25rem 0.5rem;
+}
+
+.card {
+    border: none;
+    margin-bottom: 20px;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+    font-weight: bold;
+}
+
+@media print {
+    .sidebar, .navbar, .btn, .no-print {
+        display: none !important;
+    }
+    
+    .col-md-9 {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+}

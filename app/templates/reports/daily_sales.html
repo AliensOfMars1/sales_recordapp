@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Daily Sales Report{% endblock %}
+{% block page_title %}Daily Sales Report{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <form method="GET" class="row g-3 mb-4">
+            <div class="col-auto">
+                <label>Select Date:</label>
+                <input type="date" name="date" class="form-control" value="{{ date.strftime('%Y-%m-%d') }}">
+            </div>
+            <div class="col-auto align-self-end">
+                <button type="submit" class="btn btn-primary">View Report</button>
+            </div>
+        </form>
+        
+        <div class="alert alert-info">
+            <strong>Sales for:</strong> {{ date.strftime('%B %d, %Y') }}
+        </div>
+        
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="stat-card bg-primary">
+                    <h6>Total Sales</h6>
+                    <h3>GH₵{{ "%.2f"|format(total) }}</h3>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card bg-success">
+                    <h6>Cash Payments</h6>
+                    <h3>GH₵{{ "%.2f"|format(cash) }}</h3>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card bg-info">
+                    <h6>MoMo Payments</h6>
+                    <h3>GH₵{{ "%.2f"|format(momo) }}</h3>
+                </div>
+            </div>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Time</th>
+                        <th>Barber</th>
+                        <th>Service</th>
+                        <th>Amount</th>
+                        <th>Payment Method</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sale in sales %}
+                    <tr>
+                        <td>{{ sale.created_at.strftime('%H:%M') }}</td>
+                        <td>{{ sale.barber.name }}</td>
+                        <td>{{ sale.service.name }}</td>
+                        <td class="text-end">GH₵{{ "%.2f"|format(sale.amount) }}</td>
+                        <td>{{ sale.payment_method.upper() }}</td>
+                        <td>{{ sale.notes or '-' }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center">No sales recorded for this day</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <button onclick="window.print()" class="btn btn-secondary">
+            <i class="fas fa-print me-2"></i>Print Report
+        </button>
+    </div>
+</div>
+{% endblock %}

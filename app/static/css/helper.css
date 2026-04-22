@@ -1,0 +1,261 @@
+/* ========== GLOBAL STYLES ========== */
+.position-relative {
+    position: relative;
+}
+.overflow-hidden {
+    overflow: hidden;
+}
+.bg-dark {
+    background-color: #212529 !important;
+}
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255,255,255,.55);
+}
+.navbar-dark .navbar-nav .nav-link.active {
+    color: #fff;
+}
+
+/* ========== HERO SECTIONS ========== */
+.hero-index {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/static/img/hero.jpg');
+    background-size: cover;
+    background-position: center;
+    min-height: 550px;
+}
+.hero-index-row {
+    min-height: 550px;
+}
+.hero-about {
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('/static/img/about_img.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+.hero-login {
+    background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)), url('/static/img/login.jpg');
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+}
+
+/* ========== FOOTER ========== */
+.footer-bg {
+    background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('/static/img/footer.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+}
+
+/* ========== LOGIN CARD ========== */
+.login-row {
+    min-height: calc(100vh - 200px);
+}
+.login-card {
+    border-radius: 20px;
+    background: rgba(30, 30, 40, 0.95);
+    backdrop-filter: blur(10px);
+}
+.login-icon-circle {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #DAA520 0%, #B8860B 100%);
+}
+.login-input-group-text {
+    background: rgba(50, 50, 60, 0.8);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-right: none;
+    color: #DAA520;
+}
+.login-input {
+    background: rgba(50, 50, 60, 0.8);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-left: none;
+    color: white;
+}
+.login-btn {
+    border-radius: 10px;
+    background: linear-gradient(135deg, #DAA520 0%, #B8860B 100%);
+    border: none;
+    color: white;
+}
+.login-alert {
+    border-radius: 12px;
+    background: rgba(50, 50, 60, 0.8);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #ddd;
+}
+.login-alert-icon {
+    color: #DAA520;
+}
+.login-demo-strong {
+    color: #DAA520;
+}
+.form-control:focus {
+    background: rgba(60, 60, 70, 0.9) !important;
+    border-color: #DAA520 !important;
+    box-shadow: 0 0 0 0.2rem rgba(218,165,32,0.25);
+    color: white;
+}
+.form-control::placeholder {
+    color: rgba(255,255,255,0.4);
+}
+.input-group-text i {
+    font-size: 0.9rem;
+}
+
+/* ========== UTILITIES ========== */
+.mt-n4 {
+    margin-top: -1.5rem !important;
+}
+.bg-opacity-25 {
+    --bs-bg-opacity: 0.25;
+}
+.bg-opacity-75 {
+    --bs-bg-opacity: 0.75;
+}
+.border-0 {
+    border: 0 !important;
+}
+.shadow-lg {
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
+}
+.shadow-sm {
+    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important;
+}
+.text-white-50 {
+    color: rgba(255,255,255,.5);
+}
+.text-primary {
+    color: #0d6efd !important; /* keep Bootstrap's primary, but you can change to gold if desired */
+}
+.text-warning {
+    color: #ffc107 !important;
+}
+.bg-primary {
+    background-color: #0d6efd !important;
+}
+.bg-warning {
+    background-color: #ffc107 !important;
+}
+.bg-light {
+    background-color: #f8f9fa !important;
+}
+.btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+.btn-outline-light {
+    color: #f8f9fa;
+    border-color: #f8f9fa;
+}
+.btn-outline-light:hover {
+    background-color: #f8f9fa;
+    color: #000;
+}
+
+
+
+
+/* Record Sale - Horizontal Scroll Forms */
+.barber-forms-container {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 1rem;
+}
+.barber-form-card {
+    display: inline-block;
+    width: 380px;
+    margin-right: 1.5rem;
+    vertical-align: top;
+    white-space: normal;
+}
+.barber-form-card:last-child {
+    margin-right: 0;
+}
+.barber-form-card .card {
+    height: 100%;
+}
+/* Scrollbar styling (optional) */
+.barber-forms-container::-webkit-scrollbar {
+    height: 8px;
+}
+.barber-forms-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+.barber-forms-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+.barber-forms-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+
+/* Sales list - side-by-side barber groups */
+.barber-groups-container {
+    overflow-x: auto;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1.5rem;
+    padding-bottom: 1rem;
+}
+.barber-group-card {
+    flex: 0 0 500px;
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.barber-group-card .card-header {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+.barber-group-card .table-responsive {
+    overflow-x: auto;
+    max-height: 500px;
+    overflow-y: auto;
+}
+.barber-group-card .table {
+    margin-bottom: 0;
+    width: 100%;
+}
+.barber-group-card .table th,
+.barber-group-card .table td {
+    padding: 0.6rem 0.5rem;
+    font-size: 0.85rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #dee2e6;
+}
+.barber-group-card .table th {
+    background-color: #e9ecef;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+.barber-group-card .btn-sm {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.75rem;
+}
+/* Scrollbar styling */
+.barber-groups-container::-webkit-scrollbar {
+    height: 8px;
+}
+.barber-groups-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+.barber-groups-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+.barber-groups-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+
