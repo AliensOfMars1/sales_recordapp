@@ -61,7 +61,8 @@ def dashboard():
         })
     
     # Recent sales
-    recent_sales = Sale.query.order_by(Sale.sale_date.desc()).limit(5).all()
+    # Recent sales - order by creation time (most recent first)
+    recent_sales = Sale.query.order_by(Sale.created_at.desc()).limit(5).all()
     
     return render_template('dashboard.html',
                          today_total=today_total,
