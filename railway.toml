@@ -1,0 +1,8 @@
+[build]
+builder = "nixpacks"
+
+[build.nix]
+packages = ["postgresql_14"]
+
+[deploy]
+startCommand = "gunicorn --bind 0.0.0.0:$PORT wsgi:app"
