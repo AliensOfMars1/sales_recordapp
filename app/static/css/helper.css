@@ -155,7 +155,6 @@
 
 
 
-
 /* Record Sale - Horizontal Scroll Forms */
 .barber-forms-container {
     overflow-x: auto;
@@ -454,3 +453,62 @@
         font-size: 0.7rem;
     }
 }
+
+
+/* ========== EXPENSES REPORT DARK THEME ========== */
+.expenses-report-container {
+    background: rgba(30, 30, 40, 0.95);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.expenses-report-container .card {
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+}
+
+.expenses-report-container .stat-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.expenses-report-container .card-header {
+    background: rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.expenses-report-container .progress {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.expenses-report-container .progress-bar {
+    background-color: #dc3545 !important;
+}
+
+.expenses-report-container .table {
+    background: transparent;
+}
+
+.expenses-report-container .table th {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+}
+
+.expenses-report-container .table td {
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.expenses-report-container .alert-info {
+    background: rgba(102, 126, 234, 0.2);
+    border-color: #667eea;
+    color: #fff;
+}
+
+.expenses-report-container .btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+}
+
+.expenses-report-container .btn-primary:hover {
+    opacity: 0.9;
+}
+

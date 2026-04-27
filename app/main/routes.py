@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, request, jsonify
 from flask_login import login_required
 from app.main import main_bp
 from app.models import Sale, Expense, Barber, BarberAdvance
@@ -60,9 +60,19 @@ def dashboard():
             'payout': commission - advances
         })
     
-    # Recent sales
     # Recent sales - order by creation time (most recent first)
     recent_sales = Sale.query.order_by(Sale.created_at.desc()).limit(5).all()
+    
+    # Get week days for the dropdown (for Daily Sales by Barber)
+    week_days = []
+    for i in range(7):
+        day_date = week_start + timedelta(days=i)
+        week_days.append({
+            'name': day_date.strftime('%A'),
+            'date': day_date.strftime('%Y-%m-%d')
+        })
+    
+    selected_day = week_days[0]  # Monday as default
     
     return render_template('dashboard.html',
                          today_total=today_total,
@@ -73,4 +83,42 @@ def dashboard():
                          week_momo=week_momo,
                          week_advances=week_advances,
                          barber_performance=barber_performance,
-                         recent_sales=recent_sales)
+                         recent_sales=recent_sales,
+                         week_days=week_days,
+                         selected_day_name=selected_day['name'],
+                         selected_day_date=selected_day['date'])
+
+
+@main_bp.route('/dashboard/daily-sales')
+@login_required
+def daily_sales_by_barber():
+    """API endpoint to get daily sales grouped by barber for a specific date"""
+    date_str = request.args.get('date')
+    if not date_str:
+        return jsonify([])
+    
+    target_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+    
+    # Get all active barbers
+    barbers = Barber.query.filter_by(active=True).all()
+    
+    result = []
+    for barber in barbers:
+        # Get sales for the specific date
+        sales = Sale.query.filter(
+            Sale.barber_id == barber.id,
+            Sale.sale_date == target_date
+        ).all()
+        
+        total = sum(s.amount for s in sales)
+        cash = sum(s.amount for s in sales if s.payment_method == 'cash')
+        momo = sum(s.amount for s in sales if s.payment_method == 'momo')
+        
+        result.append({
+            'name': barber.name,
+            'total': total,
+            'cash': cash,
+            'momo': momo
+        })
+    
+    return jsonify(result)
