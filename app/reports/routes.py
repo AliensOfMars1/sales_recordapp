@@ -26,36 +26,61 @@ def daily_sales():
 @reports_bp.route('/weekly-commission')
 @login_required
 def weekly_commission():
-    # Get week start date or default to current week
-    week_start_str = request.args.get('week_start')
-    if week_start_str:
-        week_start = datetime.strptime(week_start_str, '%Y-%m-%d').date()
-    else:
-        week_start = datetime.now().date() - timedelta(days=datetime.now().weekday())
+    # Get any date in the week from user, or default to today
+    date_str = request.args.get('date')
     
+    if date_str:
+        selected_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+    else:
+        selected_date = datetime.now().date()
+    
+    # Calculate the Monday of the week containing selected_date
+    week_start = selected_date - timedelta(days=selected_date.weekday())
     week_end = week_start + timedelta(days=6)
+    
+    # Debug print
+    print(f"Selected date: {selected_date}, Week: {week_start} to {week_end}")
     
     barbers = Barber.query.filter_by(active=True).all()
     weekly_data = []
     
     for barber in barbers:
-        weekly_sales = barber.total_sales(week_start, week_end)
-        commission = weekly_sales / 3
-        advances = barber.total_advances(week_start, week_end)
-        net_payout = commission - advances
+        # Get sales for the full week (Monday to Sunday)
+        weekly_sales = Sale.query.filter(
+            Sale.barber_id == barber.id,
+            Sale.sale_date >= week_start,
+            Sale.sale_date <= week_end
+        ).all()
+        total_sales = sum(s.amount for s in weekly_sales)
+        
+        commission = total_sales / 3
+        
+        # Get advances for the full week
+        weekly_advances = BarberAdvance.query.filter(
+            BarberAdvance.barber_id == barber.id,
+            BarberAdvance.advance_date >= week_start,
+            BarberAdvance.advance_date <= week_end
+        ).all()
+        total_advances = sum(a.amount for a in weekly_advances)
+        
+        net_payout = commission - total_advances
         
         weekly_data.append({
             'barber': barber,
-            'sales': weekly_sales,
+            'sales': total_sales,
             'commission': commission,
-            'advances': advances,
+            'advances': total_advances,
             'net_payout': net_payout
         })
+    
+    # Sort by sales descending
+    weekly_data.sort(key=lambda x: x['sales'], reverse=True)
     
     return render_template('reports/weekly_commission.html', 
                          weekly_data=weekly_data,
                          week_start=week_start,
-                         week_end=week_end)
+                         week_end=week_end,
+                         selected_date=selected_date,)
 
 @reports_bp.route('/expenses-report')
 @login_required
