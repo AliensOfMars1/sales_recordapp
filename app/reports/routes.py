@@ -60,6 +60,11 @@ def weekly_commission():
 @reports_bp.route('/expenses-report')
 @login_required
 def expenses_report():
+    # Default to current week if no dates provided
+    today = datetime.now().date()
+    week_start = today - timedelta(days=today.weekday())
+    week_end = week_start + timedelta(days=6)
+    
     start_date = request.args.get('start_date')
     end_date = request.args.get('end_date')
     
@@ -68,8 +73,19 @@ def expenses_report():
     if start_date:
         start = datetime.strptime(start_date, '%Y-%m-%d').date()
         query = query.filter(Expense.expense_date >= start)
+    else:
+        # Default to start of current week
+        start = week_start
+        start_date = week_start.strftime('%Y-%m-%d')
+        query = query.filter(Expense.expense_date >= start)
+    
     if end_date:
         end = datetime.strptime(end_date, '%Y-%m-%d').date()
+        query = query.filter(Expense.expense_date <= end)
+    else:
+        # Default to end of current week
+        end = week_end
+        end_date = week_end.strftime('%Y-%m-%d')
         query = query.filter(Expense.expense_date <= end)
     
     expenses = query.order_by(Expense.expense_date.desc()).all()

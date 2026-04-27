@@ -4,6 +4,12 @@
 {% block page_title %}Expenses Analysis Report{% endblock %}
 
 {% block content %}
+<div class="alert alert-info">
+    <strong>Showing expenses from:</strong> {{ start_date }} to {{ end_date }}
+    {% if not request.args.get('start_date') and not request.args.get('end_date') %}
+        (Current week)
+    {% endif %}
+</div>
 <div class="card">
     <div class="card-body">
         <form method="GET" class="row g-3 mb-4">
