@@ -532,18 +532,32 @@ body {
 
 
 
-
-
-
-
-
-
-
-
-
 /* Force hide bottom navigation on desktop */
 @media (min-width: 769px) {
     .bottom-nav {
         display: none !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-index .card.bg-dark.bg-opacity-75 {
+        background: rgba(20, 20, 30, 0.95) !important;
+        padding: 0 !important;
+    }
+    .hero-index .card-body {
+        padding: 1rem !important;
+    }
+    /* Info cards */
+    .hero-index + .container .card.border-0.shadow-sm {
+        background: rgba(20,20,30,0.95) !important;
+        color: white !important;
+        border: 1px solid rgba(255,255,255,0.1) !important;
+    }
+    .hero-index + .container .card.border-0.shadow-sm i {
+        color: #DAA520 !important;
+    }
+    .hero-index + .container .card.border-0.shadow-sm h5,
+    .hero-index + .container .card.border-0.shadow-sm p {
+        color: white !important;
     }
 }
