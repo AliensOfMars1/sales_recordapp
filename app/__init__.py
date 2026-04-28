@@ -40,6 +40,26 @@ def create_app(config_class=Config):
     with app.app_context():
         db.create_all()
         
+                # === MIGRATION: Add settled_amount column if missing ===
+        try:
+            import sqlite3
+            db_uri = app.config['SQLALCHEMY_DATABASE_URI']
+            if db_uri.startswith('sqlite:///'):
+                db_path = db_uri.replace('sqlite:///', '')
+                conn = sqlite3.connect(db_path)
+                cursor = conn.cursor()
+                cursor.execute("PRAGMA table_info(barber_advances)")
+                columns = [row[1] for row in cursor.fetchall()]
+                if 'settled_amount' not in columns:
+                    cursor.execute("ALTER TABLE barber_advances ADD COLUMN settled_amount FLOAT DEFAULT 0.00")
+                    conn.commit()
+                    print("✅ Added settled_amount column to barber_advances")
+                else:
+                    print("✓ settled_amount column already exists")
+                conn.close()
+        except Exception as e:
+            print(f"⚠️ Migration check failed: {e}")
+
         # Add sample data if database is empty
         if Admin.query.count() == 0:
             print("Creating sample data...")
