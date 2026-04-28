@@ -46,12 +46,22 @@ class Barber(db.Model):
         return sum([sale.amount for sale in query.all()]) or 0
     
     def total_advances(self, start_date=None, end_date=None):
-        query = BarberAdvance.query.filter_by(barber_id=self.id, settled=False)
+        """Get total outstanding advance amount for a barber in a date range"""
+        query = BarberAdvance.query.filter(
+            BarberAdvance.barber_id == self.id,
+            BarberAdvance.settled == False
+        )
+        
         if start_date:
             query = query.filter(BarberAdvance.advance_date >= start_date)
         if end_date:
             query = query.filter(BarberAdvance.advance_date <= end_date)
-        return sum([advance.amount for advance in query.all()]) or 0
+        
+        advances = query.all()
+        
+        # Sum remaining balances (original amount - settled amount)
+        total = sum(a.remaining_balance for a in advances)
+        return total or 0
 
 class Service(db.Model):
     __tablename__ = 'services'
@@ -105,10 +115,16 @@ class BarberAdvance(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     barber_id = db.Column(db.Integer, db.ForeignKey('barbers.id'), nullable=False)
     amount = db.Column(db.Float, nullable=False)
+    settled_amount = db.Column(db.Float, default=0.00)  # NEW: tracks how much has been repaid
     advance_date = db.Column(db.Date, nullable=False, default=datetime.utcnow().date)
     note = db.Column(db.Text)
     settled = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    @property
+    def remaining_balance(self):
+        """Calculate how much is still owed"""
+        return self.amount - (self.settled_amount or 0)
     
     def __repr__(self):
         return f'<Advance {self.amount} for Barber {self.barber_id}>'

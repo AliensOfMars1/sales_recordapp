@@ -61,7 +61,7 @@ def dashboard():
         })
     
     # Recent sales - order by creation time (most recent first)
-    recent_sales = Sale.query.order_by(Sale.created_at.desc()).limit(5).all()
+    recent_sales = Sale.query.order_by(Sale.created_at.desc()).limit(3).all()
     
     # Get week days for the dropdown (for Daily Sales by Barber)
     week_days = []
@@ -72,7 +72,11 @@ def dashboard():
             'date': day_date.strftime('%Y-%m-%d')
         })
     
-    selected_day = week_days[0]  # Monday as default
+    # ========== CHANGE HERE ==========
+    # Find today's date in week_days to set as default
+    today_str = today.strftime('%Y-%m-%d')
+    selected_day = next((day for day in week_days if day['date'] == today_str), week_days[0])
+    # =================================
     
     return render_template('dashboard.html',
                          today_total=today_total,
