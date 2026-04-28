@@ -527,3 +527,23 @@ body {
     color: rgba(255, 255, 255, 0.7);
     margin-top: 0.25rem;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Force hide bottom navigation on desktop */
+@media (min-width: 769px) {
+    .bottom-nav {
+        display: none !important;
+    }
+}
