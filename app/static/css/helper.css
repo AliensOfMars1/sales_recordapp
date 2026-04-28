@@ -1,4 +1,7 @@
 /* ========== GLOBAL STYLES ========== */
+body {
+    overflow-x: hidden;
+}
 .position-relative {
     position: relative;
 }
@@ -126,7 +129,7 @@
     color: rgba(255,255,255,.5);
 }
 .text-primary {
-    color: #0d6efd !important; /* keep Bootstrap's primary, but you can change to gold if desired */
+    color: #0d6efd !important;
 }
 .text-warning {
     color: #ffc107 !important;
@@ -153,9 +156,7 @@
     color: #000;
 }
 
-
-
-/* Record Sale - Horizontal Scroll Forms */
+/* ========== RECORD SALE ========== */
 .barber-forms-container {
     overflow-x: auto;
     white-space: nowrap;
@@ -174,7 +175,6 @@
 .barber-form-card .card {
     height: 100%;
 }
-/* Scrollbar styling (optional) */
 .barber-forms-container::-webkit-scrollbar {
     height: 8px;
 }
@@ -190,8 +190,7 @@
     background: #555;
 }
 
-
-/* Sales list - side-by-side barber groups */
+/* ========== SALES LIST (SIDE-BY-SIDE) ========== */
 .barber-groups-container {
     overflow-x: auto;
     display: flex;
@@ -241,7 +240,6 @@
     padding: 0.2rem 0.5rem;
     font-size: 0.75rem;
 }
-/* Scrollbar styling */
 .barber-groups-container::-webkit-scrollbar {
     height: 8px;
 }
@@ -257,265 +255,7 @@
     background: #555;
 }
 
-
-/* ========== MOBILE BOTTOM NAVIGATION ========== */
-@media (max-width: 768px) {
-    /* Hide the sidebar on mobile */
-    .sidebar {
-        display: none !important;
-    }
-    
-    /* Main content takes full width */
-    main {
-        width: 100% !important;
-        margin: 0 !important;
-        padding-bottom: 70px !important;
-    }
-    
-    /* Bottom navigation bar */
-    .bottom-nav {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        padding: 8px 0;
-        z-index: 1000;
-        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-    }
-    
-    .bottom-nav-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 6px 12px;
-        color: rgba(255,255,255,0.7);
-        text-decoration: none;
-        font-size: 12px;
-        transition: all 0.2s;
-        border-radius: 8px;
-        flex: 1;
-        text-align: center;
-    }
-    
-    .bottom-nav-item i {
-        font-size: 20px;
-        margin-bottom: 4px;
-    }
-    
-    .bottom-nav-item span {
-        font-size: 11px;
-        font-weight: 500;
-    }
-    
-    .bottom-nav-item.active {
-        color: white;
-        background: rgba(255,255,255,0.15);
-    }
-    
-    .bottom-nav-item:hover {
-        color: white;
-        background: rgba(255,255,255,0.1);
-    }
-    
-    /* Adjust dropdown menus for bottom nav */
-    .bottom-nav .dropdown-menu {
-        position: fixed;
-        bottom: 60px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 200px;
-        background: white;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-    
-    .bottom-nav .dropdown-toggle::after {
-        display: none;
-    }
-    
-    /* Fix for index page hero on mobile */
-    .hero-index {
-        min-height: auto !important;
-        padding: 40px 0 !important;
-    }
-    
-    .hero-index .row {
-        flex-direction: column;
-        min-height: auto !important;
-    }
-    
-    .hero-index .col-lg-6 {
-        margin-top: 0 !important;
-        padding-top: 0 !important;
-        text-align: center;
-    }
-    
-    .hero-index .col-lg-5 {
-        margin-top: 30px !important;
-    }
-    
-    .hero-index .display-4 {
-        font-size: 1.8rem !important;
-    }
-    
-    .hero-index .lead {
-        font-size: 1rem !important;
-    }
-    
-    /* Fix service card overlap */
-    .hero-index .card.bg-dark {
-        margin-top: 20px;
-        margin-bottom: 20px;
-    }
-    
-    /* Adjust stat cards on mobile */
-    .stat-card {
-        margin-bottom: 15px;
-    }
-    
-    .stat-card h3 {
-        font-size: 1.5rem;
-    }
-    
-    /* Table responsiveness */
-    .table-responsive {
-        overflow-x: auto;
-    }
-    
-    /* Barber groups container on mobile */
-    .barber-groups-container {
-        gap: 1rem;
-    }
-    
-    .barber-group-card {
-        flex: 0 0 95%;
-        min-width: 280px;
-    }
-    
-    /* Barber forms container */
-    .barber-form-card {
-        width: 320px;
-    }
-    
-    /* Login card on mobile */
-    .login-card .card-body {
-        padding: 1.5rem !important;
-    }
-    
-    .login-card h3 {
-        font-size: 1.3rem;
-    }
-}
-
-/* Desktop - hide bottom nav */
-@media (min-width: 769px) {
-    .bottom-nav {
-        display: none !important;
-    }
-}
-
-/* Additional mobile fixes for index page */
-@media (max-width: 480px) {
-    .hero-index .display-4 {
-        font-size: 1.5rem !important;
-    }
-    
-    .hero-index .lead {
-        font-size: 0.9rem !important;
-    }
-    
-    .hero-index .card-body {
-        padding: 1rem !important;
-    }
-    
-    .hero-index .card-title {
-        font-size: 1.2rem;
-    }
-    
-    .hero-index .list-unstyled li {
-        font-size: 0.85rem;
-    }
-    
-    .stat-card h3 {
-        font-size: 1.2rem;
-    }
-    
-    .stat-card h6 {
-        font-size: 0.8rem;
-    }
-    
-    .stat-card small {
-        font-size: 0.7rem;
-    }
-}
-
-
-/* ========== EXPENSES REPORT DARK THEME ========== */
-.expenses-report-container {
-    background: rgba(30, 30, 40, 0.95);
-    border-radius: 12px;
-    padding: 1.5rem;
-}
-
-.expenses-report-container .card {
-    background: rgba(255, 255, 255, 0.95);
-    border: none;
-}
-
-.expenses-report-container .stat-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.expenses-report-container .card-header {
-    background: rgba(0, 0, 0, 0.05);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.expenses-report-container .progress {
-    background-color: rgba(0, 0, 0, 0.1);
-}
-
-.expenses-report-container .progress-bar {
-    background-color: #dc3545 !important;
-}
-
-.expenses-report-container .table {
-    background: transparent;
-}
-
-.expenses-report-container .table th {
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-}
-
-.expenses-report-container .table td {
-    background: rgba(255, 255, 255, 0.95);
-}
-
-.expenses-report-container .alert-info {
-    background: rgba(102, 126, 234, 0.2);
-    border-color: #667eea;
-    color: #fff;
-}
-
-.expenses-report-container .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border: none;
-}
-
-.expenses-report-container .btn-primary:hover {
-    opacity: 0.9;
-}
-
-
-
-
-/* Fixed sidebar - scrollable content */
+/* ========== FIXED SIDEBAR + SCROLLABLE MAIN CONTENT ========== */
 .sidebar {
     position: fixed;
     top: 0;
@@ -524,34 +264,13 @@
     width: 260px;
     z-index: 100;
     overflow-y: auto;
-}
-
-main {
-    margin-left: 260px;
-    width: calc(100% - 260px);
-    overflow-y: auto;
-    height: 100vh;
-}
-
-@media (max-width: 768px) {
-    .sidebar {
-        width: 100%;
-        position: relative;
-        height: auto;
-    }
-    main {
-        margin-left: 0;
-        width: 100%;
-    }
-}
-
-/* Lemon green + black theme for sidebar */
-.sidebar {
     background: linear-gradient(135deg, #32CD32 0%, #000000 100%);
-    /* or solid colors: background-color: #32CD32; */
 }
 .sidebar .nav-link {
     color: white;
+    padding: 10px 20px;
+    margin: 5px 0;
+    border-radius: 5px;
 }
 .sidebar .nav-link:hover {
     background: rgba(255,255,255,0.2);
@@ -565,88 +284,172 @@ main {
     padding-bottom: 10px;
 }
 
-
-
-/* Mobile Bottom Navigation - Lemon Green + Black Theme */
-.bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(135deg, #32CD32 0%, #000000 100%);
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 8px 0;
-    z-index: 1000;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.15);
+.main-content {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    padding: 0 20px;
+    overflow-y: auto;
+    height: 100vh;
 }
 
-.bottom-nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 6px 12px;
-    color: rgba(255,255,255,0.8);
-    text-decoration: none;
-    font-size: 11px;
-    transition: all 0.2s;
-    border-radius: 8px;
-    flex: 1;
-    text-align: center;
-    background: transparent;
+/* ========== MOBILE BREAKPOINTS ========== */
+@media (max-width: 768px) {
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        height: auto;
+        padding: 0 15px;
+    }
+    /* Hide desktop sidebar on mobile, show bottom nav */
+    .sidebar {
+        display: none !important;
+    }
+    /* Bottom navigation (already defined) */
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(135deg, #32CD32 0%, #000000 100%);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 8px 0;
+        z-index: 1000;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.15);
+    }
+    .bottom-nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 6px 12px;
+        color: rgba(255,255,255,0.8);
+        text-decoration: none;
+        font-size: 11px;
+        border-radius: 8px;
+        flex: 1;
+        text-align: center;
+    }
+    .bottom-nav-item i {
+        font-size: 20px;
+        margin-bottom: 4px;
+    }
+    .bottom-nav-item span {
+        font-size: 10px;
+        font-weight: 500;
+    }
+    .bottom-nav-item.active {
+        color: white;
+        background: rgba(255,255,255,0.2);
+    }
+    .bottom-nav .dropdown-menu {
+        position: fixed;
+        bottom: 65px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 220px;
+        background: white;
+        border-radius: 12px;
+        padding: 8px 0;
+    }
+    .bottom-nav .dropdown-toggle::after {
+        display: none;
+    }
+    .hero-index {
+        min-height: auto !important;
+        padding: 40px 0 !important;
+    }
+    .hero-index .row {
+        flex-direction: column;
+    }
+    .hero-index .col-lg-6 {
+        margin-top: 0 !important;
+        text-align: center;
+    }
+    .hero-index .col-lg-5 {
+        margin-top: 30px !important;
+    }
+    .stat-card {
+        margin-bottom: 15px;
+    }
+    .stat-card h3 {
+        font-size: 1.5rem;
+    }
+    .table-responsive {
+        overflow-x: auto;
+    }
+    .barber-group-card {
+        flex: 0 0 95%;
+        min-width: 280px;
+    }
+    .barber-form-card {
+        width: 320px;
+    }
+    .login-card .card-body {
+        padding: 1.5rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-index .display-4 {
+        font-size: 1.5rem !important;
+    }
+    .hero-index .lead {
+        font-size: 0.9rem !important;
+    }
+    .stat-card h3 {
+        font-size: 1.2rem;
+    }
+}
+
+/* ========== EXPENSES REPORT DARK THEME ========== */
+.expenses-report-container {
+    background: rgba(30, 30, 40, 0.95);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+.expenses-report-container .card {
+    background: rgba(255, 255, 255, 0.95);
     border: none;
 }
-
-.bottom-nav-item i {
-    font-size: 20px;
-    margin-bottom: 4px;
+.expenses-report-container .stat-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
-
-.bottom-nav-item span {
-    font-size: 10px;
-    font-weight: 500;
+.expenses-report-container .card-header {
+    background: rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
-
-.bottom-nav-item.active {
+.expenses-report-container .progress {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.expenses-report-container .progress-bar {
+    background-color: #dc3545 !important;
+}
+.expenses-report-container .table {
+    background: transparent;
+}
+.expenses-report-container .table th {
+    background: rgba(0, 0, 0, 0.8);
     color: white;
-    background: rgba(255,255,255,0.2);
 }
-
-.bottom-nav-item:hover {
-    color: white;
-    background: rgba(255,255,255,0.15);
+.expenses-report-container .table td {
+    background: rgba(255, 255, 255, 0.95);
 }
-
-/* Dropdown menu inside bottom nav (mobile) */
-.bottom-nav .dropdown-menu {
-    position: fixed;
-    bottom: 65px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 220px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    padding: 8px 0;
+.expenses-report-container .alert-info {
+    background: rgba(102, 126, 234, 0.2);
+    border-color: #667eea;
+    color: #fff;
 }
-
-.bottom-nav .dropdown-toggle::after {
-    display: none;
+.expenses-report-container .btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
 }
-
-.bottom-nav .dropdown-item {
-    padding: 10px 16px;
-    font-size: 14px;
-    color: #333;
-}
-
-.bottom-nav .dropdown-item:hover {
-    background-color: #f8f9fa;
-}
-
-.bottom-nav .dropdown-item i {
-    width: 24px;
-    font-size: 14px;
+.expenses-report-container .btn-primary:hover {
+    opacity: 0.9;
 }
