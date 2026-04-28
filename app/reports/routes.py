@@ -23,6 +23,7 @@ def daily_sales():
                          cash=cash_sales,
                          momo=momo_sales)
 
+
 @reports_bp.route('/weekly-commission')
 @login_required
 def weekly_commission():
@@ -55,13 +56,16 @@ def weekly_commission():
         
         commission = total_sales / 3
         
-        # Get advances for the full week
+        # FIXED: Get advances using remaining_balance, not full amount
         weekly_advances = BarberAdvance.query.filter(
             BarberAdvance.barber_id == barber.id,
+            BarberAdvance.settled == False,
             BarberAdvance.advance_date >= week_start,
             BarberAdvance.advance_date <= week_end
         ).all()
-        total_advances = sum(a.amount for a in weekly_advances)
+        
+        # Use remaining_balance for each advance
+        total_advances = sum(a.remaining_balance for a in weekly_advances)
         
         net_payout = commission - total_advances
         
@@ -80,7 +84,8 @@ def weekly_commission():
                          weekly_data=weekly_data,
                          week_start=week_start,
                          week_end=week_end,
-                         selected_date=selected_date,)
+                         selected_date=selected_date)
+
 
 @reports_bp.route('/expenses-report')
 @login_required
