@@ -25,8 +25,8 @@ class ExpenseForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(max=200)])
     amount = FloatField('Amount', validators=[DataRequired(), NumberRange(min=0.01)])
     category = SelectField('Category', choices=[
-        ('rent', 'Rent'), ('utilities', 'Utilities'), ('supplies', 'Supplies'),
-        ('marketing', 'Marketing'), ('maintenance', 'Maintenance'), ('other', 'Other')
+         ('utilities', 'Utilities'), ('supplies', 'Supplies'),
+         ('maintenance', 'Maintenance'), ('other', 'Other')
     ], validators=[DataRequired()])
     expense_date = DateField('Expense Date', validators=[DataRequired()], default=datetime.today)
     notes = TextAreaField('Notes', validators=[Optional()])

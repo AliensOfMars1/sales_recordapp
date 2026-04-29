@@ -561,3 +561,129 @@ body {
         color: white !important;
     }
 }
+
+
+
+
+
+/* Mobile dashboard card layout - 2x2 grid */
+@media (max-width: 768px) {
+    /* First row: 4 stat cards in 2x2 grid */
+    .dashboard-stats-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    .dashboard-stats-row .col-md-3 {
+        width: 100%;
+        padding: 0;
+    }
+    .dashboard-stats-row .stat-card {
+        margin-bottom: 0;
+        padding: 12px;
+    }
+    .dashboard-stats-row .stat-card h3 {
+        font-size: 1.2rem;
+        margin-bottom: 5px;
+    }
+    .dashboard-stats-row .stat-card h6 {
+        font-size: 0.7rem;
+        margin-bottom: 5px;
+    }
+    .dashboard-stats-row .stat-card small {
+        font-size: 0.6rem;
+    }
+    
+    /* Cash Available + Total MoMo side by side */
+    .dashboard-momo-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
+    .dashboard-momo-row .col-md-4,
+    .dashboard-momo-row .col-md-8 {
+        width: 100%;
+        padding: 0;
+    }
+    .dashboard-momo-row .stat-card,
+    .dashboard-momo-row .card {
+        margin-bottom: 0;
+        padding: 12px;
+    }
+    .dashboard-momo-row .stat-card h3,
+    .dashboard-momo-row .card h3 {
+        font-size: 1.2rem;
+    }
+    .dashboard-momo-row .stat-card h6,
+    .dashboard-momo-row .card h6 {
+        font-size: 0.7rem;
+    }
+    .dashboard-momo-row .stat-card small,
+    .dashboard-momo-row .card small {
+        font-size: 0.6rem;
+    }
+}
+
+
+
+
+/* Mobile dashboard - compact layout only on small screens */
+@media (max-width: 768px) {
+    /* Hide desktop layout on mobile, show mobile layout */
+    .desktop-layout {
+        display: block;
+    }
+    
+    /* First row: 4 stat cards in 2x2 grid */
+    .desktop-layout .row:first-child {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+    .desktop-layout .row:first-child .col-md-3 {
+        width: 100%;
+        padding: 0;
+    }
+    .desktop-layout .row:first-child .stat-card {
+        margin-bottom: 0;
+        padding: 12px;
+    }
+    .desktop-layout .row:first-child .stat-card h3 {
+        font-size: 1.2rem;
+    }
+    .desktop-layout .row:first-child .stat-card h6 {
+        font-size: 0.7rem;
+    }
+    .desktop-layout .row:first-child .stat-card small {
+        font-size: 0.6rem;
+    }
+    
+    /* Cash Available + Total MoMo side by side on mobile */
+    .desktop-layout .row.mt-3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 10px !important;
+    }
+    .desktop-layout .row.mt-3 .col-md-4,
+    .desktop-layout .row.mt-3 .col-md-8 {
+        width: 100%;
+        padding: 0;
+    }
+    .desktop-layout .row.mt-3 .stat-card,
+    .desktop-layout .row.mt-3 .card {
+        margin-bottom: 0;
+        padding: 12px;
+    }
+    .desktop-layout .row.mt-3 .stat-card h3,
+    .desktop-layout .row.mt-3 .card h3 {
+        font-size: 1.2rem;
+    }
+    .desktop-layout .row.mt-3 .stat-card h6,
+    .desktop-layout .row.mt-3 .card h6 {
+        font-size: 0.7rem;
+    }
+}
