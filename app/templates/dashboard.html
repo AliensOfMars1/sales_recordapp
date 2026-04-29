@@ -4,47 +4,52 @@
 {% block page_title %}Dashboard Overview{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-3">
-        <div class="stat-card">
-            <h6>Today's Sales</h6>
-            <h3>GH₵{{ "%.2f"|format(today_total) }}</h3>
-            <small>Cash: GH₵{{ "%.2f"|format(today_cash) }} | MoMo: GH₵{{ "%.2f"|format(today_momo) }}</small>
+<!-- Desktop layout - original design -->
+<div class="desktop-layout">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h6>Today's Sales</h6>
+                <h3>GH₵{{ "%.2f"|format(today_total) }}</h3>
+                <small>Cash: GH₵{{ "%.2f"|format(today_cash) }} | MoMo: GH₵{{ "%.2f"|format(today_momo) }}</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card bg-success" id="week-total-card" data-week-total="{{ week_total }}" data-week-momo="{{ week_momo }}" data-week-advances="{{ week_advances }}">
+                <h6>Weekly Sales</h6>
+                <h3>GH₵{{ "%.2f"|format(week_total) }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card bg-danger" id="week-expenses-card" data-week-expenses="{{ week_expenses }}">
+                <h6>Weekly Expenses</h6>
+                <h3>GH₵{{ "%.2f"|format(week_expenses) }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card bg-info" id="net-profit-card">
+                <h6>Net Profit (Weekly)</h6>
+                <h3 id="net-profit-value">GH₵0.00</h3>
+            </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="stat-card bg-success" id="week-total-card" data-week-total="{{ week_total }}" data-week-momo="{{ week_momo }}" data-week-advances="{{ week_advances }}">
-            <h6>Weekly Sales</h6>
-            <h3>GH₵{{ "%.2f"|format(week_total) }}</h3>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="stat-card bg-danger" id="week-expenses-card" data-week-expenses="{{ week_expenses }}">
-            <h6>Weekly Expenses</h6>
-            <h3>GH₵{{ "%.2f"|format(week_expenses) }}</h3>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="stat-card bg-info" id="net-profit-card">
-            <h6>Net Profit (Weekly)</h6>
-            <h3 id="net-profit-value">GH₵0.00</h3>
-        </div>
-    </div>
-</div>
 
-<!-- Cash Available Card (calculated by JS) -->
-<div class="row mt-3">
-    <div class="col-md-4">
-        <div class="stat-card" style="background: linear-gradient(135deg, #DAA520 0%, #B8860B 100%);">
-            <h6>Cash Available</h6>
-            <h3 id="cash-available-value">GH₵0.00</h3>
-            <small>For physical cash counting</small>
+    <!-- Cash Available + Total MoMo side by side (desktop) -->
+    <div class="row mt-3">
+        <div class="col-md-4">
+            <div class="stat-card" style="background: linear-gradient(135deg, #DAA520 0%, #B8860B 100%);">
+                <h6>Cash Available</h6>
+                <h3 id="cash-available-value">GH₵0.00</h3>
+                <small>For physical cash counting</small>
+            </div>
         </div>
-    </div>
-    <div class="col-md-8">
-        <div class="card cash-breakdown-card h-100">
-            <div class="card-body" id="cash-breakdown">
-                <p class="text-muted">Calculating...</p>
+        <div class="col-md-8">
+            <div class="card" style="background: linear-gradient(135deg, #20B2AA 0%, #008080 100%); color: white;">
+                <div class="card-body">
+                    <h6 class="card-title">Total MoMo (Weekly)</h6>
+                    <h3 id="total-momo-value">GH₵0.00</h3>
+                    <small>Mobile Money collected this week</small>
+                </div>
             </div>
         </div>
     </div>
@@ -174,20 +179,10 @@
         const cashAvailable = weekTotal - (weekAdvances + weekExpenses + weekMoMo);
         document.getElementById('cash-available-value').innerHTML = 'GH₵' + cashAvailable.toFixed(2);
         
-        // Build simplified breakdown
-        const breakdownHtml = `
-            <div class="cash-breakdown-formula">
-                <div class="formula-text">Available Cash: Total Sales - (Advances + Expenses + Available MoMo)</div>
-                <div class="calculation">GH₵${weekTotal.toFixed(2)} - (GH₵${weekAdvances.toFixed(2)} + GH₵${weekExpenses.toFixed(2)} + GH₵${weekMoMo.toFixed(2)})</div>
-            </div>
-            <div class="cash-breakdown-total">
-                <div class="label">Available Cash</div>
-                <div class="value">GH₵${cashAvailable.toFixed(2)}</div>
-            </div>
-        `;
-        document.getElementById('cash-breakdown').innerHTML = breakdownHtml;
+        // Total MoMo
+        document.getElementById('total-momo-value').innerHTML = 'GH₵' + weekMoMo.toFixed(2);
         
-        // Net Profit = Sales - Expenses - (Sales/3)
+        // Net Profit
         const totalCommission = weekTotal / 3;
         const netProfit = weekTotal - weekExpenses - totalCommission;
         document.getElementById('net-profit-value').innerHTML = 'GH₵' + netProfit.toFixed(2);
@@ -196,14 +191,14 @@
     // Load daily sales data for a selected day
     async function loadDailySales(date) {
         const tbody = document.getElementById('dailySalesTableBody');
-        tbody.innerHTML = '<tr><td colspan="4" class="text-center"><div class="spinner-border spinner-border-sm text-primary" role="status"></div> Loading...</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center"><div class="spinner-border spinner-border-sm text-primary" role="status"></div> Loading...<\/td><\/tr>';
         
         try {
             const response = await fetch(`/dashboard/daily-sales?date=${date}`);
             const data = await response.json();
             
             if (data.length === 0 || data.every(barber => barber.total === 0)) {
-                tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No sales recorded for this day</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No sales recorded for this day<\/td><\/tr>';
                 return;
             }
             
@@ -211,22 +206,22 @@
             data.forEach(barber => {
                 if (barber.total > 0 || barber.cash > 0 || barber.momo > 0) {
                     html += '<tr>';
-                    html += '<td><strong>' + barber.name + '</strong></td>';
-                    html += '<td class="text-end fw-bold">GH₵' + barber.total.toFixed(2) + '</td>';
-                    html += '<td class="text-end text-success">GH₵' + barber.cash.toFixed(2) + '</td>';
-                    html += '<td class="text-end text-info">GH₵' + barber.momo.toFixed(2) + '</td>';
-                    html += '</tr>';
+                    html += '<td><strong>' + barber.name + '<\/strong><\/td>';
+                    html += '<td class="text-end fw-bold">GH₵' + barber.total.toFixed(2) + '<\/td>';
+                    html += '<td class="text-end text-success">GH₵' + barber.cash.toFixed(2) + '<\/td>';
+                    html += '<td class="text-end text-info">GH₵' + barber.momo.toFixed(2) + '<\/td>';
+                    html += '<\/tr>';
                 }
             });
             
             if (html === '') {
-                tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No sales recorded for this day</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No sales recorded for this day<\/td><\/tr>';
             } else {
                 tbody.innerHTML = html;
             }
         } catch (error) {
             console.error('Error loading daily sales:', error);
-            tbody.innerHTML = '<tr><td colspan="4" class="text-center text-danger">Error loading data</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="4" class="text-center text-danger">Error loading data<\/td><\/tr>';
         }
     }
     
@@ -234,7 +229,6 @@
     document.addEventListener('DOMContentLoaded', function() {
         calculateFinancials();
         
-        // Handle day dropdown clicks
         const dayOptions = document.querySelectorAll('.day-option');
         dayOptions.forEach(option => {
             option.addEventListener('click', function(e) {
@@ -246,18 +240,12 @@
             });
         });
         
-
-        // Load default selected day (should be today's date)
-        const selectedDayElement = document.querySelector('.day-option[data-day="' + document.getElementById('selectedDayBtn').innerText.split(' ')[0] + '"]');
         const defaultDate = document.getElementById('selectedDayBtn').innerText.split(' ')[1]?.replace('(', '').replace(')', '');
         if (defaultDate) {
             loadDailySales(defaultDate);
         } else {
-            // Fallback to first day in dropdown
             const fallbackDate = document.querySelector('.day-option')?.getAttribute('data-day');
-            if (fallbackDate) {
-                loadDailySales(fallbackDate);
-            }
+            if (fallbackDate) loadDailySales(fallbackDate);
         }
     });
 </script>
