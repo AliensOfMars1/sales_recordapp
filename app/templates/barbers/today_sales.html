@@ -24,7 +24,7 @@
     </div>
 </div>
 
-<!-- Sales List with Date Picker (no auto-refresh) -->
+<!-- Sales List with Date Picker -->
 <div class="sales-list">
     <div class="sales-list-header">
         <span><i class="fas fa-list me-1"></i> Sales</span>
@@ -43,6 +43,9 @@
                 </div>
                 <div class="amount">GH₵{{ "%.2f"|format(sale.amount) }}</div>
                 <div class="method">{{ sale.payment_method.upper() }}</div>
+                {% if sale.is_new %}
+                <span class="badge bg-success ms-2">NEW</span>
+                {% endif %}
             </div>
             {% endfor %}
             <div class="sales-total">
