@@ -74,10 +74,10 @@ def today_sales():
     
     total = sum(s.amount for s in sales)
     today_commission = total / 3
-    pending_advances = sum(a.remaining_balance for a in barber.advances if not a.settled)
-    today_net_payout = today_commission - pending_advances
+    today_cash = sum(s.amount for s in sales if s.payment_method == 'cash')
+    today_momo = sum(s.amount for s in sales if s.payment_method == 'momo')
     
-    # Mark sales recorded in last 10 minutes as "new"
+    # Mark recent sales (last 10 minutes) as "new"
     for sale in sales:
         time_diff = datetime.now() - sale.created_at
         sale.is_new = time_diff.total_seconds() < 600
@@ -87,8 +87,8 @@ def today_sales():
                          total=total,
                          today_total=total,
                          today_commission=today_commission,
-                         pending_advances=pending_advances,
-                         today_net_payout=today_net_payout,
+                         today_cash=today_cash,
+                         today_momo=today_momo,
                          selected_date=target_date.strftime('%Y-%m-%d'))
 
 @barbers_bp.route('/weekly-sales')

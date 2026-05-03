@@ -198,6 +198,12 @@ body {
     font-weight: bold;
 }
 
+
+.sales-item.new-sale {
+    background: #e8f5e9;
+    border-left: 4px solid #4caf50;
+}
+
 /* Date picker input */
 input[type="date"] {
     border: 1px solid #ddd;
