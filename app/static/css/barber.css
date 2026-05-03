@@ -1,0 +1,241 @@
+/* Barber Dashboard Styles - Mobile First */
+
+/* Base styles */
+body {
+    background: #f5f5f5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding-bottom: 70px; /* Space for bottom nav */
+}
+
+/* Bottom Navigation */
+.barber-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #32CD32 0%, #000000 100%);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 0;
+    z-index: 1000;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+}
+
+.barber-bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    font-size: 12px;
+    transition: all 0.2s;
+    flex: 1;
+    text-align: center;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.barber-bottom-nav-item i {
+    font-size: 22px;
+    margin-bottom: 4px;
+}
+
+.barber-bottom-nav-item span {
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.barber-bottom-nav-item.active {
+    color: white;
+    background: rgba(255,255,255,0.2);
+}
+
+/* Top Stats Cards */
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.stat-card-sm {
+    background: white;
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-left: 4px solid;
+}
+
+.stat-card-sm h6 {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.stat-card-sm h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.stat-card-sm.green { border-left-color: #28a745; }
+.stat-card-sm.blue { border-left-color: #007bff; }
+.stat-card-sm.orange { border-left-color: #fd7e14; }
+.stat-card-sm.purple { border-left-color: #6f42c1; }
+
+/* Sales List */
+.sales-list {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.sales-list-header {
+    background: #f8f9fa;
+    padding: 12px;
+    font-weight: bold;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sales-list-header .date-picker {
+    font-size: 14px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 4px 8px;
+}
+
+.sales-item {
+    padding: 12px;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s;
+}
+
+.sales-item.new-sale {
+    background: #fff9e6;
+    border-left: 3px solid #ffc107;
+}
+
+.sales-item .info {
+    flex: 2;
+}
+
+.sales-item .info .service {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.sales-item .info .datetime {
+    font-size: 11px;
+    color: #888;
+    margin-top: 4px;
+}
+
+.sales-item .amount {
+    font-weight: bold;
+    font-size: 16px;
+    color: #28a745;
+}
+
+.sales-item .method {
+    font-size: 11px;
+    color: #666;
+    margin-left: 10px;
+    min-width: 50px;
+    text-align: right;
+}
+
+.sales-total {
+    background: #f8f9fa;
+    padding: 12px;
+    font-weight: bold;
+    text-align: right;
+    border-top: 1px solid #eee;
+    font-size: 16px;
+}
+
+/* Weekly Sales Cards */
+.week-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.day-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.day-card .day-header {
+    background: #f8f9fa;
+    padding: 10px 12px;
+    font-weight: bold;
+    border-bottom: 1px solid #eee;
+}
+
+.day-card .day-stats {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    font-size: 13px;
+}
+
+.day-stats span {
+    font-weight: bold;
+}
+
+
+.sales-item.new-sale {
+    background: #e8f5e9;
+    border-left: 4px solid #4caf50;
+}
+
+/* Date picker input */
+input[type="date"] {
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 6px 12px;
+    font-size: 13px;
+}
+
+/* Mobile specific */
+@media (max-width: 480px) {
+    .stats-row {
+        gap: 8px;
+    }
+    .stat-card-sm h3 {
+        font-size: 16px;
+    }
+    .sales-item {
+        flex-wrap: wrap;
+    }
+    .sales-item .method {
+        margin-left: 0;
+        margin-top: 5px;
+        width: 100%;
+        text-align: left;
+    }
+}
+
+@media (max-width: 480px) {
+    .barber-bottom-nav-item span {
+        font-size: 9px;
+    }
+    .barber-bottom-nav-item i {
+        font-size: 18px;
+    }
+}

@@ -1,0 +1,23 @@
+{% if sales %}
+    {% for sale in sales %}
+    <div class="sales-item {% if sale.is_new %}new-sale{% endif %}">
+        <div class="info">
+            <div class="service">{{ sale.service.name }}</div>
+            <div class="datetime">
+                <i class="far fa-clock me-1"></i>{{ sale.created_at.strftime('%H:%M') }}
+                <span class="ms-2">{{ sale.sale_date.strftime('%Y-%m-%d') }}</span>
+            </div>
+        </div>
+        <div class="amount">GH₵{{ "%.2f"|format(sale.amount) }}</div>
+        <div class="method">{{ sale.payment_method.upper() }}</div>
+        {% if sale.is_new %}
+        <span class="badge bg-success ms-2">NEW</span>
+        {% endif %}
+    </div>
+    {% endfor %}
+    <div class="sales-total">
+        Total: GH₵{{ "%.2f"|format(total) }}
+    </div>
+{% else %}
+    <div class="text-center text-muted py-4">No sales recorded for this day.</div>
+{% endif %}
