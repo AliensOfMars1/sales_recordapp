@@ -84,17 +84,21 @@ class Service(db.Model):
         return f'<Service {self.name} - ${self.default_price}>'
 
 class Sale(db.Model):
-    # ... unchanged ...
     __tablename__ = 'sales'
+    
     id = db.Column(db.Integer, primary_key=True)
     barber_id = db.Column(db.Integer, db.ForeignKey('barbers.id'), nullable=False)
     service_id = db.Column(db.Integer, db.ForeignKey('services.id'), nullable=False)
     custom_service_name = db.Column(db.String(100))
     amount = db.Column(db.Float, nullable=False)
-    payment_method = db.Column(db.String(20), nullable=False)
+    payment_method = db.Column(db.String(20), nullable=False)  # 'cash' or 'momo'
     sale_date = db.Column(db.Date, nullable=False, default=datetime.utcnow().date)
     notes = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # NEW audit fields
+    status = db.Column(db.String(20), default='active')   # 'active', 'updated', 'deleted'
+    original_amount = db.Column(db.Float, nullable=True)  # stores the amount before an update
     
     def __repr__(self):
         return f'<Sale {self.id} - ${self.amount}>'
