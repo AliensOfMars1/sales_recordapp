@@ -7,7 +7,7 @@
 <!-- Top Stats Cards -->
 <div class="stats-row">
     <div class="stat-card-sm green">
-        <h6>Today's Sales</h6>
+        <h6>Today's Sales <span class="badge bg-light text-dark ms-1">{{ sales|selectattr('status', 'ne', 'deleted')|list|length }}</span></h6>
         <h3>GH₵{{ "%.2f"|format(today_total) }}</h3>
     </div>
     <div class="stat-card-sm blue">
@@ -27,10 +27,11 @@
 <!-- Sales List with Date Picker -->
 <div class="sales-list">
     <div class="sales-list-header">
-        <span><i class="fas fa-list me-1"></i> Sales</span>
+        <span><i class="fas fa-list me-1"></i> 
+            <span class="badge bg-secondary me-1">{{ sales|selectattr('status', 'ne', 'deleted')|list|length }}</span> Sales
+        </span>
         <input type="date" id="datePicker" class="date-picker" value="{{ selected_date }}">
     </div>
-<!-- Inside the sales list container -->
     <div id="salesListContainer">
         {% if sales %}
             {% for sale in sales %}
