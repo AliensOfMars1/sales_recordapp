@@ -1,0 +1,117 @@
+{% extends "barber_base.html" %}
+
+{% block title %}{{ barber.name }} - Dashboard{% endblock %}
+{% block page_title %}Welcome, {{ barber.name }}!{% endblock %}
+
+{% block content %}
+<!-- Stats Cards -->
+<div class="row">
+    <div class="col-md-3">
+        <div class="stat-card bg-success">
+            <h6>This Week's Sales</h6>
+            <h3>GH₵{{ "%.2f"|format(weekly_total) }}</h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card bg-info">
+            <h6>Your Commission (33%)</h6>
+            <h3>GH₵{{ "%.2f"|format(weekly_commission) }}</h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card bg-warning">
+            <h6>Outstanding Advances</h6>
+            <h3>GH₵{{ "%.2f"|format(total_advances) }}</h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card bg-primary">
+            <h6>Net Payout (This Week)</h6>
+            <h3>GH₵{{ "%.2f"|format(net_payout) }}</h3>
+        </div>
+    </div>
+</div>
+
+<!-- Your Sales History -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Your Sales History</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Service</th>
+                                <th class="text-end">Amount (GH₵)</th>
+                                <th>Payment Method</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sale in sales %}
+                            <tr>
+                                <td>{{ sale.sale_date.strftime('%Y-%m-%d') }}</td>
+                                <td>{{ sale.service.name }}</td>
+                                <td class="text-end">GH₵{{ "%.2f"|format(sale.amount) }}</td>
+                                <td>{{ sale.payment_method.upper() }}</td>
+                                <td>{{ sale.notes or '-' }}</td>
+                            </tr>
+                            {% else %}
+                            <td><td colspan="5" class="text-center">No sales recorded yet</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Your Advances / Borrowings -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Your Advances / Borrowings</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Settled</th>
+                                <th>Remaining</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for advance in barber.advances %}
+                            <tr>
+                                <td>{{ advance.advance_date.strftime('%Y-%m-%d') }}</td>
+                                <td class="text-danger">GH₵{{ "%.2f"|format(advance.amount) }}</td>
+                                <td class="text-success">GH₵{{ "%.2f"|format(advance.settled_amount) }}</td>
+                                <td class="text-warning">GH₵{{ "%.2f"|format(advance.remaining_balance) }}</td>
+                                <td>{{ advance.note or '-' }}</td>
+                            </tr>
+                            {% else %}
+                            <td><td colspan="5" class="text-center">No advances recorded</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="alert alert-info mt-3">
+    <i class="fas fa-info-circle me-2"></i>
+    <strong>Commission Calculation:</strong> Commission = Total Sales ÷ 3. Advances are deducted from your weekly payout.
+</div>
+{% endblock %}

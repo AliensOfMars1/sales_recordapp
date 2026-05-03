@@ -40,7 +40,7 @@ def create_app(config_class=Config):
     with app.app_context():
         db.create_all()
         
-                # === MIGRATION: Add settled_amount column if missing ===
+        # === MIGRATION: Add settled_amount column if missing ===
         try:
             import sqlite3
             db_uri = app.config['SQLALCHEMY_DATABASE_URI']
@@ -56,6 +56,26 @@ def create_app(config_class=Config):
                     print("✅ Added settled_amount column to barber_advances")
                 else:
                     print("✓ settled_amount column already exists")
+                conn.close()
+        except Exception as e:
+            print(f"⚠️ Migration check failed: {e}")
+
+        # === MIGRATION: Add password_hash column to barbers if missing ===
+        try:
+            import sqlite3
+            db_uri = app.config['SQLALCHEMY_DATABASE_URI']
+            if db_uri.startswith('sqlite:///'):
+                db_path = db_uri.replace('sqlite:///', '')
+                conn = sqlite3.connect(db_path)
+                cursor = conn.cursor()
+                cursor.execute("PRAGMA table_info(barbers)")
+                columns = [row[1] for row in cursor.fetchall()]
+                if 'password_hash' not in columns:
+                    cursor.execute("ALTER TABLE barbers ADD COLUMN password_hash VARCHAR(200)")
+                    conn.commit()
+                    print("✅ Added password_hash column to barbers table")
+                else:
+                    print("✓ password_hash column already exists")
                 conn.close()
         except Exception as e:
             print(f"⚠️ Migration check failed: {e}")

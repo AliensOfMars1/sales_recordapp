@@ -1,0 +1,49 @@
+{% extends "barber_base.html" %}
+
+{% block title %}Weekly Sales{% endblock %}
+
+{% block content %}
+
+<!-- Top Stats Cards for Week -->
+<div class="stats-row">
+    <div class="stat-card-sm green">
+        <h6>Total Sales</h6>
+        <h3>GH₵{{ "%.2f"|format(week_total) }}</h3>
+    </div>
+    <div class="stat-card-sm blue">
+        <h6>Commission (33%)</h6>
+        <h3>GH₵{{ "%.2f"|format(week_commission) }}</h3>
+    </div>
+    <div class="stat-card-sm orange">
+        <h6>Outstanding Advances</h6>
+        <h3>GH₵{{ "%.2f"|format(week_advances) }}</h3>
+    </div>
+    <div class="stat-card-sm purple">
+        <h6>Net Payout</h6>
+        <h3>GH₵{{ "%.2f"|format(week_net_payout) }}</h3>
+    </div>
+</div>
+
+<!-- Daily Breakdown Cards (Monday to Sunday) -->
+<div class="week-grid">
+    {% for day in week_data %}
+    <div class="day-card">
+        <div class="day-header">
+            {{ day.name }} ({{ day.date }})
+        </div>
+        <div class="day-stats">
+            <span>Sales:</span>
+            <span>GH₵{{ "%.2f"|format(day.sales) }}</span>
+        </div>
+        <div class="day-stats">
+            <span>Cash:</span>
+            <span>GH₵{{ "%.2f"|format(day.cash) }}</span>
+        </div>
+        <div class="day-stats">
+            <span>MoMo:</span>
+            <span>GH₵{{ "%.2f"|format(day.momo) }}</span>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
