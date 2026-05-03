@@ -49,21 +49,27 @@ def list_sales():
     sales = Sale.query.order_by(Sale.sale_date.desc(), Sale.created_at.desc()).all()
     return render_template('sales/list_sales.html', sales=sales)
 
+
 @sales_bp.route('/edit/<int:sale_id>', methods=['GET', 'POST'])
 @login_required
 def edit_sale(sale_id):
     sale = Sale.query.get_or_404(sale_id)
     
     if request.method == 'POST':
+        new_amount = float(request.form.get('amount'))
+        # If amount changed, store original and mark as updated
+        if new_amount != sale.amount:
+            sale.original_amount = sale.amount
+            sale.status = 'updated'
+        sale.amount = new_amount
         sale.barber_id = int(request.form.get('barber_id'))
         sale.service_id = int(request.form.get('service_id'))
-        sale.amount = float(request.form.get('amount'))
         sale.payment_method = request.form.get('payment_method')
         sale.sale_date = datetime.strptime(request.form.get('sale_date'), '%Y-%m-%d').date()
         sale.notes = request.form.get('notes')
         
         db.session.commit()
-        flash('Sale updated successfully!', 'success')
+        flash('Sale updated successfully (barber will see changes).', 'success')
         return redirect(url_for('sales.list_sales'))
     
     barbers = Barber.query.filter_by(active=True).all()
@@ -74,7 +80,8 @@ def edit_sale(sale_id):
 @login_required
 def delete_sale(sale_id):
     sale = Sale.query.get_or_404(sale_id)
-    db.session.delete(sale)
+    # Soft delete
+    sale.status = 'deleted'
     db.session.commit()
-    flash('Sale deleted successfully!', 'success')
+    flash('Sale marked as deleted (barber will see it crossed out).', 'success')
     return redirect(url_for('sales.list_sales'))

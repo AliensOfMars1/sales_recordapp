@@ -79,6 +79,26 @@ def create_app(config_class=Config):
                 conn.close()
         except Exception as e:
             print(f"⚠️ Migration check failed: {e}")
+                # === MIGRATION: Add status and original_amount to sales table ===
+        try:
+            import sqlite3
+            db_uri = app.config['SQLALCHEMY_DATABASE_URI']
+            if db_uri.startswith('sqlite:///'):
+                db_path = db_uri.replace('sqlite:///', '')
+                conn = sqlite3.connect(db_path)
+                cursor = conn.cursor()
+                cursor.execute("PRAGMA table_info(sales)")
+                columns = [row[1] for row in cursor.fetchall()]
+                if 'status' not in columns:
+                    cursor.execute("ALTER TABLE sales ADD COLUMN status VARCHAR(20) DEFAULT 'active'")
+                    print("✅ Added status column to sales table")
+                if 'original_amount' not in columns:
+                    cursor.execute("ALTER TABLE sales ADD COLUMN original_amount FLOAT")
+                    print("✅ Added original_amount column to sales table")
+                conn.commit()
+                conn.close()
+        except Exception as e:
+            print(f"⚠️ Migration check failed: {e}")    
 
         # Add sample data if database is empty
         if Admin.query.count() == 0:

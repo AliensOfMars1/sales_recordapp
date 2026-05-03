@@ -30,22 +30,39 @@
         <span><i class="fas fa-list me-1"></i> Sales</span>
         <input type="date" id="datePicker" class="date-picker" value="{{ selected_date }}">
     </div>
+<!-- Inside the sales list container -->
     <div id="salesListContainer">
         {% if sales %}
             {% for sale in sales %}
-            <div class="sales-item {% if sale.is_new %}new-sale{% endif %}">
+            <div class="sales-item {% if sale.status == 'deleted' %}deleted-sale{% endif %}">
                 <div class="info">
-                    <div class="service">{{ sale.service.name }}</div>
+                    <div class="service">
+                        {{ sale.service.name }}
+                        {% if sale.status == 'updated' %}
+                            <span class="badge bg-warning text-dark ms-2">Updated</span>
+                        {% endif %}
+                        {% if sale.status == 'deleted' %}
+                            <span class="badge bg-danger ms-2">Deleted</span>
+                        {% endif %}
+                        {% if sale.is_new and sale.status != 'deleted' %}
+                            <span class="badge bg-success ms-2">NEW</span>
+                        {% endif %}
+                    </div>
                     <div class="datetime">
                         <i class="far fa-clock me-1"></i>{{ sale.created_at.strftime('%H:%M') }}
                         <span class="ms-2">{{ sale.sale_date.strftime('%Y-%m-%d') }}</span>
                     </div>
                 </div>
-                <div class="amount">GH₵{{ "%.2f"|format(sale.amount) }}</div>
+                <div class="amount">
+                    {% if sale.status == 'updated' and sale.original_amount %}
+                        <span class="text-muted text-decoration-line-through">GH₵{{ "%.2f"|format(sale.original_amount) }}</span>
+                        → 
+                    {% endif %}
+                    <span class="{% if sale.status == 'deleted' %}text-decoration-line-through text-muted{% endif %}">
+                        GH₵{{ "%.2f"|format(sale.amount) }}
+                    </span>
+                </div>
                 <div class="method">{{ sale.payment_method.upper() }}</div>
-                {% if sale.is_new %}
-                <span class="badge bg-success ms-2">NEW</span>
-                {% endif %}
             </div>
             {% endfor %}
             <div class="sales-total">

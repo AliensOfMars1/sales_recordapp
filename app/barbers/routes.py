@@ -67,23 +67,26 @@ def today_sales():
     else:
         target_date = datetime.now().date()
     
-    sales = Sale.query.filter(
+    # Get all sales for the date (including deleted and updated)
+    all_sales = Sale.query.filter(
         Sale.barber_id == barber.id,
         Sale.sale_date == target_date
     ).order_by(Sale.created_at.desc()).all()
     
-    total = sum(s.amount for s in sales)
+    # For totals, exclude deleted sales
+    active_sales = [s for s in all_sales if s.status != 'deleted']
+    total = sum(s.amount for s in active_sales)
     today_commission = total / 3
-    today_cash = sum(s.amount for s in sales if s.payment_method == 'cash')
-    today_momo = sum(s.amount for s in sales if s.payment_method == 'momo')
+    today_cash = sum(s.amount for s in active_sales if s.payment_method == 'cash')
+    today_momo = sum(s.amount for s in active_sales if s.payment_method == 'momo')
     
     # Mark recent sales (last 10 minutes) as "new"
-    for sale in sales:
+    for sale in all_sales:
         time_diff = datetime.now() - sale.created_at
         sale.is_new = time_diff.total_seconds() < 600
     
     return render_template('barbers/today_sales.html',
-                         sales=sales,
+                         sales=all_sales,          # all sales for display
                          total=total,
                          today_total=total,
                          today_commission=today_commission,
