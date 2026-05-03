@@ -245,3 +245,214 @@ input[type="date"] {
         font-size: 18px;
     }
 }
+
+
+
+/* ========== DARK MODE STYLES ========== */
+body.dark-mode {
+    background: #1a1a2e;
+    color: #eee;
+}
+
+body.dark-mode .card,
+body.dark-mode .sales-list,
+body.dark-mode .day-card,
+body.dark-mode .stat-card-sm,
+body.dark-mode .sales-list-header,
+body.dark-mode .sales-total,
+body.dark-mode .day-header,
+body.dark-mode .day-stats {
+    background: #16213e;
+    color: #eee;
+    border-color: #0f3460;
+}
+
+body.dark-mode .sales-list-header {
+    border-bottom-color: #0f3460;
+}
+
+body.dark-mode .sales-item {
+    border-bottom-color: #0f3460;
+}
+
+body.dark-mode .sales-item.new-sale {
+    background: #1a3a2a;
+}
+
+body.dark-mode .sales-item.deleted-sale {
+    background: #2a1a1a;
+    opacity: 0.8;
+}
+
+body.dark-mode .text-muted {
+    color: #aaa !important;
+}
+
+body.dark-mode .table-light {
+    background: #0f3460;
+}
+
+body.dark-mode .table-light th {
+    background: #0f3460;
+    color: #eee;
+}
+
+body.dark-mode .table-hover tbody tr:hover {
+    background: #1a2a4a;
+}
+
+body.dark-mode .form-control,
+body.dark-mode .input-group-text,
+body.dark-mode .date-picker {
+    background: #0f3460;
+    border-color: #1a4a7a;
+    color: #eee;
+}
+
+body.dark-mode .form-control:focus {
+    background: #1a4a7a;
+    color: #eee;
+}
+
+body.dark-mode .btn-outline-primary {
+    color: #eee;
+    border-color: #4facfe;
+}
+
+body.dark-mode .btn-outline-primary:hover {
+    background: #4facfe;
+    color: #1a1a2e;
+}
+
+body.dark-mode .btn-outline-secondary {
+    color: #eee;
+    border-color: #888;
+}
+
+body.dark-mode .alert-warning {
+    background: #2a1a0a;
+    border-color: #b8860b;
+    color: #ffd700;
+}
+
+body.dark-mode .badge.bg-light {
+    background: #2a2a4a !important;
+    color: #eee !important;
+}
+
+/* Light mode (default) */
+body.light-mode {
+    background: #f5f5f5;
+    color: #333;
+}
+
+body.light-mode .card,
+body.light-mode .sales-list,
+body.light-mode .day-card,
+body.light-mode .stat-card-sm,
+body.light-mode .sales-list-header,
+body.light-mode .sales-total,
+body.light-mode .day-header,
+body.light-mode .day-stats {
+    background: white;
+    color: #333;
+}
+
+body.light-mode .sales-item.new-sale {
+    background: #e8f5e9;
+}
+
+body.light-mode .sales-item.deleted-sale {
+    background: #f8f9fa;
+}
+
+
+/* ========== DARK MODE STYLES ========== */
+body.dark-mode {
+    background: #1a1a2e;
+    color: #eee;
+}
+
+/* Card headers - no fixed background */
+body.dark-mode .card-header {
+    background: #16213e !important;
+    border-bottom-color: #0f3460;
+}
+
+/* Table headers and footers */
+body.dark-mode .table-header th,
+body.dark-mode .table-footer th {
+    background: #0f3460;
+    color: #eee;
+}
+
+body.dark-mode .table tbody tr {
+    border-bottom-color: #0f3460;
+}
+
+body.dark-mode .table tbody tr:hover {
+    background: #1a2a4a;
+}
+
+body.dark-mode .table td {
+    background: #16213e;
+    color: #eee;
+}
+
+body.dark-mode .table-light {
+    background: #0f3460 !important;
+}
+
+/* Form controls in dark mode */
+body.dark-mode .form-control,
+body.dark-mode .input-group-text,
+body.dark-mode .date-picker {
+    background: #0f3460;
+    border-color: #1a4a7a;
+    color: #eee;
+}
+
+body.dark-mode .form-control:focus {
+    background: #1a4a7a;
+    color: #eee;
+}
+
+/* Buttons */
+body.dark-mode .btn-outline-primary {
+    color: #eee;
+    border-color: #4facfe;
+}
+
+body.dark-mode .btn-outline-primary:hover {
+    background: #4facfe;
+    color: #1a1a2e;
+}
+
+/* Alert */
+body.dark-mode .alert-warning {
+    background: #2a1a0a;
+    border-color: #b8860b;
+    color: #ffd700;
+}
+
+/* Badges */
+body.dark-mode .badge.bg-light {
+    background: #2a2a4a !important;
+    color: #eee !important;
+}
+
+body.dark-mode .badge.bg-secondary {
+    background: #1a4a7a !important;
+}
+
+body.dark-mode .text-muted {
+    color: #aaa !important;
+}
+
+body.dark-mode .text-success {
+    color: #4caf50 !important;
+}
+
+body.dark-mode .text-danger {
+    color: #f44336 !important;
+}
