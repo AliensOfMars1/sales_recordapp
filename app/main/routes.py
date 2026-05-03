@@ -23,14 +23,21 @@ def dashboard():
     week_start = today - timedelta(days=today.weekday())
     week_end = week_start + timedelta(days=6)
     
-    # Today's sales
-    today_sales = Sale.query.filter(func.date(Sale.sale_date) == today).all()
+    # Today's sales (exclude deleted)
+    today_sales = Sale.query.filter(
+        func.date(Sale.sale_date) == today,
+        Sale.status.in_(['active', 'updated'])
+    ).all()
     today_total = sum(s.amount for s in today_sales)
     today_cash = sum(s.amount for s in today_sales if s.payment_method == 'cash')
     today_momo = sum(s.amount for s in today_sales if s.payment_method == 'momo')
     
-    # Weekly sales
-    week_sales = Sale.query.filter(Sale.sale_date >= week_start, Sale.sale_date <= week_end).all()
+    # Weekly sales (exclude deleted)
+    week_sales = Sale.query.filter(
+        Sale.sale_date >= week_start,
+        Sale.sale_date <= week_end,
+        Sale.status.in_(['active', 'updated'])
+    ).all()
     week_total = sum(s.amount for s in week_sales)
     week_momo = sum(s.amount for s in week_sales if s.payment_method == 'momo')
     
@@ -60,10 +67,12 @@ def dashboard():
             'payout': commission - advances
         })
     
-    # Recent sales - order by creation time (most recent first)
-    recent_sales = Sale.query.order_by(Sale.created_at.desc()).limit(3).all()
+    # Recent sales (exclude deleted)
+    recent_sales = Sale.query.filter(
+        Sale.status.in_(['active', 'updated'])
+    ).order_by(Sale.created_at.desc()).limit(3).all()
     
-    # Get week days for the dropdown (for Daily Sales by Barber)
+    # Get week days for the dropdown
     week_days = []
     for i in range(7):
         day_date = week_start + timedelta(days=i)
@@ -72,11 +81,8 @@ def dashboard():
             'date': day_date.strftime('%Y-%m-%d')
         })
     
-    # ========== CHANGE HERE ==========
-    # Find today's date in week_days to set as default
     today_str = today.strftime('%Y-%m-%d')
     selected_day = next((day for day in week_days if day['date'] == today_str), week_days[0])
-    # =================================
     
     return render_template('dashboard.html',
                          today_total=today_total,
@@ -103,15 +109,15 @@ def daily_sales_by_barber():
     
     target_date = datetime.strptime(date_str, '%Y-%m-%d').date()
     
-    # Get all active barbers
     barbers = Barber.query.filter_by(active=True).all()
     
     result = []
     for barber in barbers:
-        # Get sales for the specific date
+        # Exclude deleted sales
         sales = Sale.query.filter(
             Sale.barber_id == barber.id,
-            Sale.sale_date == target_date
+            Sale.sale_date == target_date,
+            Sale.status.in_(['active', 'updated'])
         ).all()
         
         total = sum(s.amount for s in sales)

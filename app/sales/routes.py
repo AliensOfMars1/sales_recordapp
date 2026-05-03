@@ -45,10 +45,11 @@ def get_service_price(service_id):
 @sales_bp.route('/list')
 @login_required
 def list_sales():
-    """View all sales with edit/delete options"""
-    sales = Sale.query.order_by(Sale.sale_date.desc(), Sale.created_at.desc()).all()
+    """View all sales EXCLUDING deleted ones (soft delete)"""
+    sales = Sale.query.filter(Sale.status != 'deleted').order_by(
+        Sale.sale_date.desc(), Sale.created_at.desc()
+    ).all()
     return render_template('sales/list_sales.html', sales=sales)
-
 
 @sales_bp.route('/edit/<int:sale_id>', methods=['GET', 'POST'])
 @login_required
@@ -80,7 +81,7 @@ def edit_sale(sale_id):
 @login_required
 def delete_sale(sale_id):
     sale = Sale.query.get_or_404(sale_id)
-    # Soft delete
+    # Soft delete – only mark as deleted, do not remove from DB
     sale.status = 'deleted'
     db.session.commit()
     flash('Sale marked as deleted (barber will see it crossed out).', 'success')

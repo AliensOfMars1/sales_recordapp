@@ -52,7 +52,7 @@ def delete_barber(barber_id):
     return redirect(url_for('barbers.manage_barbers'))
 
 
-# ========== BARBER LOGIN DASHBOARD ==========
+# ========== BARBER DASHBOARD ==========
 @barbers_bp.route('/today-sales')
 @login_required
 def today_sales():
@@ -67,32 +67,30 @@ def today_sales():
     else:
         target_date = datetime.now().date()
     
-    # Get all sales for the date (including deleted and updated)
     all_sales = Sale.query.filter(
         Sale.barber_id == barber.id,
         Sale.sale_date == target_date
     ).order_by(Sale.created_at.desc()).all()
     
-    # For totals, exclude deleted sales
     active_sales = [s for s in all_sales if s.status != 'deleted']
     total = sum(s.amount for s in active_sales)
     today_commission = total / 3
     today_cash = sum(s.amount for s in active_sales if s.payment_method == 'cash')
     today_momo = sum(s.amount for s in active_sales if s.payment_method == 'momo')
     
-    # Mark recent sales (last 10 minutes) as "new"
     for sale in all_sales:
         time_diff = datetime.now() - sale.created_at
         sale.is_new = time_diff.total_seconds() < 600
     
     return render_template('barbers/today_sales.html',
-                         sales=all_sales,          # all sales for display
+                         sales=all_sales,
                          total=total,
                          today_total=total,
                          today_commission=today_commission,
                          today_cash=today_cash,
                          today_momo=today_momo,
                          selected_date=target_date.strftime('%Y-%m-%d'))
+
 
 @barbers_bp.route('/weekly-sales')
 @login_required
@@ -112,9 +110,11 @@ def weekly_sales():
     
     for i in range(7):
         day_date = week_start + timedelta(days=i)
+        # Exclude deleted sales
         sales = Sale.query.filter(
             Sale.barber_id == barber.id,
-            Sale.sale_date == day_date
+            Sale.sale_date == day_date,
+            Sale.status.in_(['active', 'updated'])
         ).all()
         day_total = sum(s.amount for s in sales)
         day_cash = sum(s.amount for s in sales if s.payment_method == 'cash')
@@ -143,7 +143,6 @@ def weekly_sales():
                          week_net_payout=week_net_payout)
 
 
-# ========== BARBER EARNINGS HISTORY (CLEAN VERSION) ==========
 @barbers_bp.route('/history')
 @login_required
 def history():
@@ -154,7 +153,6 @@ def history():
     barber = current_user
     today = datetime.now().date()
     
-    # Get selected month (default to current month)
     selected_month_str = request.args.get('month')
     if selected_month_str:
         selected_month = datetime.strptime(selected_month_str, '%Y-%m').date()
@@ -167,11 +165,12 @@ def history():
     else:
         month_end = month_start.replace(month=month_start.month+1, day=1) - timedelta(days=1)
     
-    # --- Totals for the selected month ---
+    # Totals for selected month (exclude deleted)
     month_sales_q = Sale.query.filter(
         Sale.barber_id == barber.id,
         Sale.sale_date >= month_start,
-        Sale.sale_date <= month_end
+        Sale.sale_date <= month_end,
+        Sale.status.in_(['active', 'updated'])
     ).all()
     total_sales = sum(s.amount for s in month_sales_q)
     total_commission = total_sales / 3
@@ -185,7 +184,7 @@ def history():
     total_advances = sum(a.remaining_balance for a in month_advances_q)
     net_payout = total_commission - total_advances
     
-    # --- Weekly breakdown (labels: "May W1", "May W2", etc.) ---
+    # Weekly breakdown (exclude deleted)
     weekly_breakdown = []
     current_week_start = month_start
     week_counter = 1
@@ -197,7 +196,8 @@ def history():
         week_sales = Sale.query.filter(
             Sale.barber_id == barber.id,
             Sale.sale_date >= current_week_start,
-            Sale.sale_date <= week_end
+            Sale.sale_date <= week_end,
+            Sale.status.in_(['active', 'updated'])
         ).all()
         week_total = sum(s.amount for s in week_sales)
         week_commission = week_total / 3
@@ -210,7 +210,6 @@ def history():
         ).all()
         week_adv_total = sum(a.remaining_balance for a in week_advances)
         
-        # Week label: e.g., "May W1"
         month_abbr = current_week_start.strftime('%b')
         week_label = f"{month_abbr} W{week_counter}"
         weekly_breakdown.append({
@@ -223,7 +222,7 @@ def history():
         current_week_start = week_end + timedelta(days=1)
         week_counter += 1
     
-    # --- Data for last 6 months (commission only) ---
+    # Data for last 6 months (exclude deleted)
     months_labels = []
     months_commission = []
     for i in range(5, -1, -1):
@@ -237,7 +236,8 @@ def history():
         month_sales = Sale.query.filter(
             Sale.barber_id == barber.id,
             Sale.sale_date >= month_start_dt,
-            Sale.sale_date <= month_end_dt
+            Sale.sale_date <= month_end_dt,
+            Sale.status.in_(['active', 'updated'])
         ).all()
         month_total = sum(s.amount for s in month_sales)
         month_comm = month_total / 3
@@ -255,6 +255,7 @@ def history():
                          months_labels=months_labels,
                          months_commission=months_commission,
                          selected_month=selected_month.strftime('%Y-%m'))
+
 
 @barbers_bp.route('/barber-dashboard')
 @login_required

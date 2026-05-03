@@ -27,7 +27,7 @@ class Barber(UserMixin, db.Model):
     name = db.Column(db.String(100), nullable=False)
     phone = db.Column(db.String(20))
     email = db.Column(db.String(100))
-    password_hash = db.Column(db.String(200), nullable=True)   # NEW: for barber login
+    password_hash = db.Column(db.String(200), nullable=True)
     active = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
@@ -48,7 +48,11 @@ class Barber(UserMixin, db.Model):
         return f'<Barber {self.name}>'
     
     def total_sales(self, start_date=None, end_date=None):
-        query = Sale.query.filter_by(barber_id=self.id)
+        """Get total sales excluding deleted records"""
+        query = Sale.query.filter(
+            Sale.barber_id == self.id,
+            Sale.status.in_(['active', 'updated'])
+        )
         if start_date:
             query = query.filter(Sale.sale_date >= start_date)
         if end_date:
@@ -70,14 +74,16 @@ class Barber(UserMixin, db.Model):
         return total or 0
 
 class Service(db.Model):
-    # ... unchanged ...
     __tablename__ = 'services'
+    
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     default_price = db.Column(db.Float, nullable=False)
     description = db.Column(db.Text)
     active = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # Relationships
     sales = db.relationship('Sale', backref='service', lazy=True)
     
     def __repr__(self):
@@ -91,21 +97,21 @@ class Sale(db.Model):
     service_id = db.Column(db.Integer, db.ForeignKey('services.id'), nullable=False)
     custom_service_name = db.Column(db.String(100))
     amount = db.Column(db.Float, nullable=False)
-    payment_method = db.Column(db.String(20), nullable=False)  # 'cash' or 'momo'
+    payment_method = db.Column(db.String(20), nullable=False)
     sale_date = db.Column(db.Date, nullable=False, default=datetime.utcnow().date)
     notes = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
-    # NEW audit fields
-    status = db.Column(db.String(20), default='active')   # 'active', 'updated', 'deleted'
-    original_amount = db.Column(db.Float, nullable=True)  # stores the amount before an update
+    # Audit fields
+    status = db.Column(db.String(20), default='active')
+    original_amount = db.Column(db.Float, nullable=True)
     
     def __repr__(self):
         return f'<Sale {self.id} - ${self.amount}>'
 
 class Expense(db.Model):
-    # ... unchanged ...
     __tablename__ = 'expenses'
+    
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     amount = db.Column(db.Float, nullable=False)
@@ -118,8 +124,8 @@ class Expense(db.Model):
         return f'<Expense {self.title} - ${self.amount}>'
 
 class BarberAdvance(db.Model):
-    # ... unchanged with settled_amount and remaining_balance property ...
     __tablename__ = 'barber_advances'
+    
     id = db.Column(db.Integer, primary_key=True)
     barber_id = db.Column(db.Integer, db.ForeignKey('barbers.id'), nullable=False)
     amount = db.Column(db.Float, nullable=False)
