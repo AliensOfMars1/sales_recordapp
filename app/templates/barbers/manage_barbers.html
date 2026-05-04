@@ -47,8 +47,8 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-light">
                             <tr>
                                 <th>Name</th>
                                 <th>Phone</th>
@@ -59,32 +59,36 @@
                         </thead>
                         <tbody>
                             {% for barber in barbers %}
-                            <form method="POST" action="{{ url_for('barbers.edit_barber', barber_id=barber.id) }}">
                             <tr>
-                                <td>
-                                    <input type="text" name="name" value="{{ barber.name }}" class="form-control form-control-sm">
-                                 </td
-                                <td>
-                                    <input type="text" name="phone" value="{{ barber.phone or '' }}" class="form-control form-control-sm">
-                                 </td
-                                <td>
-                                    <input type="email" name="email" value="{{ barber.email or '' }}" class="form-control form-control-sm">
-                                 </td
-                                <td>
-                                    <select name="active" class="form-select form-select-sm">
-                                        <option value="true" {% if barber.active %}selected{% endif %}>Active</option>
-                                        <option value="false" {% if not barber.active %}selected{% endif %}>Inactive</option>
-                                    </select>
-                                 </td
-                                <td class="text-center">
-                                    <a href="{{ url_for('barbers.set_barber_password', barber_id=barber.id) }}" class="btn btn-sm btn-info">
-                                        <i class="fas fa-key"></i> Set Password
-                                    </a>
-                                    <button type="submit" class="btn btn-sm btn-warning">Update</button>
-                                    <a href="{{ url_for('barbers.delete_barber', barber_id=barber.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Delete this barber?')">Delete</a>
-                                </td
+                                <form method="POST" action="{{ url_for('barbers.edit_barber', barber_id=barber.id) }}" style="display: inline;">
+                                    <td>
+                                        <input type="text" name="name" value="{{ barber.name }}" class="form-control form-control-sm" required>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="phone" value="{{ barber.phone or '' }}" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="email" name="email" value="{{ barber.email or '' }}" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <select name="active" class="form-select form-select-sm">
+                                            <option value="true" {% if barber.active %}selected{% endif %}>Active</option>
+                                            <option value="false" {% if not barber.active %}selected{% endif %}>Inactive</option>
+                                        </select>
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="submit" class="btn btn-sm btn-warning">
+                                            <i class="fas fa-edit"></i> Update
+                                        </button>
+                                        <a href="{{ url_for('barbers.set_barber_password', barber_id=barber.id) }}" class="btn btn-sm btn-info">
+                                            <i class="fas fa-key"></i> Password
+                                        </a>
+                                        <a href="{{ url_for('barbers.delete_barber', barber_id=barber.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Delete this barber?')">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </a>
+                                    </td>
+                                </form>
                              </tr
-                            </form>
                             {% endfor %}
                         </tbody>
                     </table>

@@ -33,10 +33,13 @@ def manage_barbers():
 @login_required
 def edit_barber(barber_id):
     barber = Barber.query.get_or_404(barber_id)
+    
+    # Get data from form
     barber.name = request.form.get('name')
     barber.phone = request.form.get('phone')
     barber.email = request.form.get('email')
     barber.active = request.form.get('active') == 'true'
+    
     db.session.commit()
     flash('Barber updated successfully!', 'success')
     return redirect(url_for('barbers.manage_barbers'))
