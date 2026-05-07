@@ -4,7 +4,8 @@ from app.extensions import db
 from app.sales import sales_bp
 from app.forms import SaleForm
 from app.models import Sale, Service, Barber
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
+ 
 
 @sales_bp.route('/record', methods=['GET', 'POST'])
 @login_required
@@ -45,11 +46,64 @@ def get_service_price(service_id):
 @sales_bp.route('/list')
 @login_required
 def list_sales():
-    """View all sales EXCLUDING deleted ones (soft delete)"""
-    sales = Sale.query.filter(Sale.status != 'deleted').order_by(
-        Sale.sale_date.desc(), Sale.created_at.desc()
-    ).all()
-    return render_template('sales/list_sales.html', sales=sales)
+    # Debug print
+    print("=== LIST SALES ROUTE CALLED ===")
+    
+    # Get selected date from query string (default to today)
+    date_str = request.args.get('date')
+    print(f"Date from URL: {date_str}")
+    
+    if date_str:
+        selected_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+    else:
+        selected_date = datetime.now().date()
+    
+    print(f"Selected date: {selected_date}")
+    
+    # Calculate current week (Monday to Sunday) for dropdown options
+    today = datetime.now().date()
+    week_start = today - timedelta(days=today.weekday())
+    
+    # Get week days for dropdown (Monday to Sunday of current week)
+    week_days = []
+    for i in range(7):
+        day_date = week_start + timedelta(days=i)
+        week_days.append({
+            'name': day_date.strftime('%A'),
+            'date': day_date.strftime('%Y-%m-%d')
+        })
+    
+    print(f"Week days generated: {week_days}")  # Should show 7 days
+    
+    # Get all active barbers
+    barbers = Barber.query.filter_by(active=True).all()
+    print(f"Active barbers count: {len(barbers)}")
+    
+    # Build data for each barber
+    sales_by_barber = []
+    for barber in barbers:
+        day_sales = Sale.query.filter(
+            Sale.barber_id == barber.id,
+            Sale.sale_date == selected_date,
+            Sale.status != 'deleted'
+        ).order_by(Sale.created_at.desc()).all()
+        
+        print(f"Barber {barber.name}: {len(day_sales)} sales on {selected_date}")
+        
+        if day_sales:
+            sales_by_barber.append({
+                'barber': barber,
+                'sales': day_sales
+            })
+    
+    selected_day_name = selected_date.strftime('%A')
+    selected_day_date = selected_date.strftime('%Y-%m-%d')
+    
+    return render_template('sales/list_sales.html',
+                         sales_by_barber=sales_by_barber,
+                         week_days=week_days,
+                         selected_day_name=selected_day_name,
+                         selected_day_date=selected_day_date)
 
 @sales_bp.route('/edit/<int:sale_id>', methods=['GET', 'POST'])
 @login_required
