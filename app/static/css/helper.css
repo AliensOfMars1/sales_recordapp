@@ -687,3 +687,54 @@ body {
         font-size: 0.7rem;
     }
 }
+
+
+/* Recent Sales by Barber - Horizontal Scrollable */
+.recent-sales-container {
+    overflow-x: auto;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    padding-bottom: 1rem;
+}
+.recent-sales-card {
+    flex: 0 0 350px;
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.recent-sales-card .card-header {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+.recent-sales-card .card-body {
+    padding: 0;
+    max-height: 350px;
+    overflow-y: auto;
+}
+.recent-sales-card .list-group-item {
+    border-left: none;
+    border-right: none;
+}
+.recent-sales-card .list-group-item:first-child {
+    border-top: none;
+}
+.recent-sales-container::-webkit-scrollbar {
+    height: 8px;
+}
+.recent-sales-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+.recent-sales-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+.recent-sales-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

@@ -4,26 +4,44 @@
 {% block page_title %}Sales Records{% endblock %}
 
 {% block content %}
+
+<!-- DATE FILTER - Auto-submit on change -->
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="row align-items-center">
+            <div class="col-md-4">
+                <strong><i class="fas fa-calendar-alt me-2"></i>Filter by Date:</strong>
+            </div>
+            <div class="col-md-8">
+                <form method="GET" action="" id="filterForm">
+                    <select name="date" class="form-select" style="width: auto; display: inline-block;" onchange="this.form.submit()">
+                        {% for day in week_days %}
+                        <option value="{{ day.date }}" {% if day.date == selected_day_date %}selected{% endif %}>
+                            {{ day.name }} ({{ day.date }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <a href="/sales/list" class="btn btn-secondary ms-2">Today</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="mb-3">
     <a href="{{ url_for('sales.record_sale') }}" class="btn btn-primary">
         <i class="fas fa-plus me-2"></i>Record New Sale
     </a>
 </div>
 
-{% if sales %}
-    {# Group sales by barber #}
-    {% set barbers_dict = {} %}
-    {% for sale in sales %}
-        {% set _ = barbers_dict.update({sale.barber.id: sale.barber}) %}
-    {% endfor %}
-
+{% if sales_by_barber %}
     <div class="barber-groups-container">
-        {% for barber_id, barber in barbers_dict.items() %}
+        {% for barber_data in sales_by_barber %}
         <div class="barber-group-card">
             <div class="card-header">
                 <h5 class="mb-0">
-                    <i class="fas fa-user me-2"></i>{{ barber.name }}
-                    <span class="badge bg-secondary ms-2">{{ sales|selectattr('barber.id', 'equalto', barber.id)|list|length }} sales</span>
+                    <i class="fas fa-user me-2"></i>{{ barber_data.barber.name }}
+                    <span class="badge bg-secondary ms-2">{{ barber_data.sales|length }} sale(s)</span>
                 </h5>
             </div>
             <div class="table-responsive">
@@ -33,12 +51,12 @@
                             <th>Date</th>
                             <th>Service</th>
                             <th class="text-end">Amount (₵)</th>
-                            <th>Method</th>
+                            <th>Payment Method</th>
                             <th class="text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for sale in sales if sale.barber.id == barber.id %}
+                        {% for sale in barber_data.sales %}
                         <tr>
                             <td>{{ sale.sale_date.strftime('%Y-%m-%d') }}</td>
                             <td>{{ sale.service.name }}</td>
@@ -63,7 +81,6 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <p>Are you sure you want to delete this sale?</p>
                                         <p><strong>Barber:</strong> {{ sale.barber.name }}<br>
                                         <strong>Service:</strong> {{ sale.service.name }}<br>
                                         <strong>Amount:</strong> ₵{{ "%.2f"|format(sale.amount) }}<br>
@@ -85,15 +102,10 @@
         {% endfor %}
     </div>
 {% else %}
-    <div class="alert alert-info">No sales recorded yet.</div>
+    <div class="alert alert-info text-center py-4">
+        <i class="fas fa-info-circle me-2"></i>
+        No sales recorded for <strong>{{ selected_day_name }} ({{ selected_day_date }})</strong>
+    </div>
 {% endif %}
-{% endblock %}
 
-{% block extra_js %}
-<script>
-// Optional: Add tooltips
-$(document).ready(function() {
-    $('[title]').tooltip({ trigger: 'hover' });
-});
-</script>
 {% endblock %}

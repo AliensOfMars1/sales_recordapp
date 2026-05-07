@@ -4,129 +4,109 @@
 {% block page_title %}Dashboard Overview{% endblock %}
 
 {% block content %}
-<!-- Desktop layout - original design -->
-<div class="desktop-layout">
-    <div class="row">
-        <div class="col-md-3">
-            <div class="stat-card">
-                <h6>Today's Sales</h6>
-                <h3>GH₵{{ "%.2f"|format(today_total) }}</h3>
-                <small>Cash: GH₵{{ "%.2f"|format(today_cash) }} | MoMo: GH₵{{ "%.2f"|format(today_momo) }}</small>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stat-card bg-success" id="week-total-card" data-week-total="{{ week_total }}" data-week-momo="{{ week_momo }}" data-week-advances="{{ week_advances }}">
-                <h6>Weekly Sales</h6>
-                <h3>GH₵{{ "%.2f"|format(week_total) }}</h3>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stat-card bg-danger" id="week-expenses-card" data-week-expenses="{{ week_expenses }}">
-                <h6>Weekly Expenses</h6>
-                <h3>GH₵{{ "%.2f"|format(week_expenses) }}</h3>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stat-card bg-info" id="net-profit-card">
-                <h6>Net Profit (Weekly)</h6>
-                <h3 id="net-profit-value">GH₵0.00</h3>
-            </div>
+<div class="row">
+    <div class="col-md-3">
+        <div class="stat-card">
+            <h6>Today's Sales</h6>
+            <h3>GH₵{{ "%.2f"|format(today_total) }}</h3>
+            <small>Cash: GH₵{{ "%.2f"|format(today_cash) }} | MoMo: GH₵{{ "%.2f"|format(today_momo) }}</small>
         </div>
     </div>
-
-    <!-- Cash Available + Total MoMo side by side (desktop) -->
-    <div class="row mt-3">
-        <div class="col-md-4">
-            <div class="stat-card" style="background: linear-gradient(135deg, #DAA520 0%, #B8860B 100%);">
-                <h6>Cash Available</h6>
-                <h3 id="cash-available-value">GH₵0.00</h3>
-                <small>For physical cash counting</small>
-            </div>
+    <div class="col-md-3">
+        <div class="stat-card bg-success" id="week-total-card" data-week-total="{{ week_total }}" data-week-momo="{{ week_momo }}" data-week-advances="{{ week_advances }}">
+            <h6>Weekly Sales</h6>
+            <h3>GH₵{{ "%.2f"|format(week_total) }}</h3>
         </div>
-        <div class="col-md-8">
-            <div class="card" style="background: linear-gradient(135deg, #20B2AA 0%, #008080 100%); color: white;">
-                <div class="card-body">
-                    <h6 class="card-title">Total MoMo (Weekly)</h6>
-                    <h3 id="total-momo-value">GH₵0.00</h3>
-                    <small>Mobile Money collected this week</small>
-                </div>
-            </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card bg-danger" id="week-expenses-card" data-week-expenses="{{ week_expenses }}">
+            <h6>Weekly Expenses</h6>
+            <h3>GH₵{{ "%.2f"|format(week_expenses) }}</h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card bg-info" id="net-profit-card">
+            <h6>Net Profit (Weekly)</h6>
+            <h3 id="net-profit-value" class="text-success">GH₵0.00</h3>
         </div>
     </div>
 </div>
 
-<!-- Barber Performance -->
-<div class="row mt-4">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <h5>Barber Performance (This Week)</h5>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Barber</th>
-                                <th class="text-end">Sales</th>
-                                <th class="text-end">Commission (33%)</th>
-                                <th class="text-end">Advances</th>
-                                <th class="text-end">Net Payout</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for barber in barber_performance %}
-                            <tr>
-                                <td><strong>{{ barber.name }}</strong></td>
-                                <td class="text-end">GH₵{{ "%.2f"|format(barber.sales) }}</td>
-                                <td class="text-end">GH₵{{ "%.2f"|format(barber.commission) }}</td>
-                                <td class="text-end text-danger">-GH₵{{ "%.2f"|format(barber.advances) }}</td>
-                                <td class="text-end fw-bold">GH₵{{ "%.2f"|format(barber.payout) }}</td>
-                            </tr>
-                            {% else %}
-                            <tr>
-                                <td colspan="5" class="text-center">No active barbers</td
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Recent Sales and Daily Sales side by side -->
+<!-- Two cards: Total MoMo + Weekly Advances side by side -->
 <div class="row mt-3">
     <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5>Recent Sales</h5>
-            </div>
+        <div class="card" style="background: linear-gradient(135deg, #20B2AA 0%, #008080 100%); color: white;">
             <div class="card-body">
-                <div class="list-group">
-                    {% for sale in recent_sales %}
-                    <div class="list-group-item">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <strong>{{ sale.barber.name }}</strong><br>
-                                <small>{{ sale.sale_date.strftime('%Y-%m-%d') }}</small>
-                            </div>
-                            <div class="text-end">
-                                <span class="fw-bold">GH₵{{ "%.2f"|format(sale.amount) }}</span><br>
-                                <small class="text-muted">{{ sale.payment_method.upper() }}</small>
-                            </div>
-                        </div>
-                    </div>
-                    {% else %}
-                    <div class="list-group-item text-center">No recent sales</div>
-                    {% endfor %}
-                </div>
+                <h6 class="card-title">Total MoMo (Weekly)</h6>
+                <h3 id="total-momo-value">GH₵0.00</h3>
+                <small>Mobile Money collected this week</small>
             </div>
         </div>
     </div>
-    
     <div class="col-md-6">
+        <div class="card" style="background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%); color: white;">
+            <div class="card-body">
+                <h6 class="card-title">Weekly Advances</h6>
+                <h3 id="weekly-advances-value">GH₵0.00</h3>
+                <small>Total advances taken this week</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Sales by Barber (Horizontal Scrollable) - FIRST -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h5>Recent Sales by Barber (Today)</h5>
+    </div>
+</div>
+
+{% if recent_sales_by_barber %}
+<div class="recent-sales-container mb-4">
+    {% for barber_data in recent_sales_by_barber %}
+    <div class="recent-sales-card">
+        <div class="card-header">
+            <h6 class="mb-0">
+                <i class="fas fa-user me-2"></i>{{ barber_data.barber.name }}
+                <span class="badge bg-secondary ms-2">{{ barber_data.sales|length }} sale(s)</span>
+            </h6>
+        </div>
+        <div class="card-body p-0">
+            <div class="list-group list-group-flush">
+                {% for sale in barber_data.sales %}
+                <div class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <small class="text-muted">{{ sale.created_at.strftime('%H:%M') }}</small>
+                            <div class="fw-bold">{{ sale.service.name }}</div>
+                        </div>
+                        <div class="text-end">
+                            <span class="fw-bold text-success">GH₵{{ "%.2f"|format(sale.amount) }}</span><br>
+                            <small class="text-muted">{{ sale.payment_method.upper() }}</small>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="list-group-item text-center text-muted py-4">
+                    <i class="fas fa-calendar-day me-1"></i> No sales today
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="row">
+    <div class="col-12">
+        <div class="alert alert-info">No sales recorded today</div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Daily Sales by Barber - SECOND -->
+<div class="row mt-4">
+    <div class="col-md-12">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5>Daily Sales by Barber</h5>
@@ -164,8 +144,49 @@
     </div>
 </div>
 
+<!-- Barber Performance (This Week) - THIRD -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Barber Performance (This Week)</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Barber</th>
+                                <th class="text-end">Sales (GH₵)</th>
+                                <th class="text-end">Commission (33%)</th>
+                                <th class="text-end">Advances (GH₵)</th>
+                                <th class="text-end">Net Payout (GH₵)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for barber in barber_performance %}
+                            <tr>
+                                <td><strong>{{ barber.name }}</strong></td>
+                                <td class="text-end">GH₵{{ "%.2f"|format(barber.sales) }}</td>
+                                <td class="text-end">GH₵{{ "%.2f"|format(barber.commission) }}</td>
+                                <td class="text-end text-danger">-GH₵{{ "%.2f"|format(barber.advances) }}</td>
+                                <td class="text-end text-success fw-bold">GH₵{{ "%.2f"|format(barber.payout) }}</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center">No active barbers</td
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
-    // Calculate cash available and net profit
+    // Calculate financials
     function calculateFinancials() {
         const weekCard = document.getElementById('week-total-card');
         const weekTotal = parseFloat(weekCard.getAttribute('data-week-total'));
@@ -175,17 +196,18 @@
         const expensesCard = document.getElementById('week-expenses-card');
         const weekExpenses = parseFloat(expensesCard.getAttribute('data-week-expenses'));
         
-        // Cash available
-        const cashAvailable = weekTotal - (weekAdvances + weekExpenses + weekMoMo);
-        document.getElementById('cash-available-value').innerHTML = 'GH₵' + cashAvailable.toFixed(2);
-        
         // Total MoMo
         document.getElementById('total-momo-value').innerHTML = 'GH₵' + weekMoMo.toFixed(2);
         
-        // Net Profit
+        // Weekly Advances
+        document.getElementById('weekly-advances-value').innerHTML = 'GH₵' + weekAdvances.toFixed(2);
+        
+        // Net Profit (in green)
         const totalCommission = weekTotal / 3;
         const netProfit = weekTotal - weekExpenses - totalCommission;
-        document.getElementById('net-profit-value').innerHTML = 'GH₵' + netProfit.toFixed(2);
+        const netProfitElement = document.getElementById('net-profit-value');
+        netProfitElement.innerHTML = 'GH₵' + netProfit.toFixed(2);
+        netProfitElement.classList.add('text-success');
     }
     
     // Load daily sales data for a selected day
@@ -225,10 +247,10 @@
         }
     }
     
-    // Day selection handler
     document.addEventListener('DOMContentLoaded', function() {
         calculateFinancials();
         
+        // Handle day dropdown clicks
         const dayOptions = document.querySelectorAll('.day-option');
         dayOptions.forEach(option => {
             option.addEventListener('click', function(e) {

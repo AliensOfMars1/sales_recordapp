@@ -67,10 +67,19 @@ def dashboard():
             'payout': commission - advances
         })
     
-    # Recent sales (exclude deleted)
-    recent_sales = Sale.query.filter(
-        Sale.status.in_(['active', 'updated'])
-    ).order_by(Sale.created_at.desc()).limit(3).all()
+    # Recent sales by barber (today, limit 5 per barber) - NEW
+    recent_sales_by_barber = []
+    for barber in barbers:
+        barber_today_sales = Sale.query.filter(
+            Sale.barber_id == barber.id,
+            Sale.sale_date == today,
+            Sale.status != 'deleted'
+        ).order_by(Sale.created_at.desc()).limit(5).all()
+        
+        recent_sales_by_barber.append({
+            'barber': barber,
+            'sales': barber_today_sales
+        })
     
     # Get week days for the dropdown
     week_days = []
@@ -93,7 +102,7 @@ def dashboard():
                          week_momo=week_momo,
                          week_advances=week_advances,
                          barber_performance=barber_performance,
-                         recent_sales=recent_sales,
+                         recent_sales_by_barber=recent_sales_by_barber,
                          week_days=week_days,
                          selected_day_name=selected_day['name'],
                          selected_day_date=selected_day['date'])
