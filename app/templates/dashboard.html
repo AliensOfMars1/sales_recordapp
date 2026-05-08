@@ -27,13 +27,11 @@
     <div class="col-md-3">
         <div class="stat-card bg-info" id="net-profit-card">
             <h6>Net Profit (Weekly)</h6>
-            <h3 id="net-profit-value" class="text-success">GH₵0.00</h3>
+            <h3 id="net-profit-value">GH₵0.00</h3>
         </div>
     </div>
 </div>
-
-<!-- Two cards: Total MoMo + Weekly Advances side by side -->
-<div class="row mt-3">
+<div class="row mt-3 g-3">
     <div class="col-md-6">
         <div class="card" style="background: linear-gradient(135deg, #20B2AA 0%, #008080 100%); color: white;">
             <div class="card-body">
@@ -44,17 +42,17 @@
         </div>
     </div>
     <div class="col-md-6">
-        <div class="card" style="background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%); color: white;">
+        <div class="card" style="background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%); color: white;">
             <div class="card-body">
-                <h6 class="card-title">Weekly Advances</h6>
-                <h3 id="weekly-advances-value">GH₵0.00</h3>
-                <small>Total advances taken this week</small>
+                <h6 class="card-title">Available Funds</h6>
+                <h3>GH₵{{ "%.2f"|format(available_funds) }}</h3>
+                <small>Available cash + MoMo balance</small>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Recent Sales by Barber (Horizontal Scrollable) - FIRST -->
+<!-- Recent Sales by Barber (Horizontal Scrollable) -->
 <div class="row mt-4">
     <div class="col-md-12">
         <h5>Recent Sales by Barber (Today)</h5>
@@ -104,7 +102,7 @@
 </div>
 {% endif %}
 
-<!-- Daily Sales by Barber - SECOND -->
+<!-- Daily Sales by Barber -->
 <div class="row mt-4">
     <div class="col-md-12">
         <div class="card">
@@ -144,7 +142,7 @@
     </div>
 </div>
 
-<!-- Barber Performance (This Week) - THIRD -->
+<!-- Barber Performance (This Week) -->
 <div class="row mt-4">
     <div class="col-md-12">
         <div class="card">
@@ -170,7 +168,7 @@
                                 <td class="text-end">GH₵{{ "%.2f"|format(barber.sales) }}</td>
                                 <td class="text-end">GH₵{{ "%.2f"|format(barber.commission) }}</td>
                                 <td class="text-end text-danger">-GH₵{{ "%.2f"|format(barber.advances) }}</td>
-                                <td class="text-end text-success fw-bold">GH₵{{ "%.2f"|format(barber.payout) }}</td>
+                                <td class="text-end fw-bold">GH₵{{ "%.2f"|format(barber.payout) }}</td>
                             </tr>
                             {% else %}
                             <tr>
@@ -191,7 +189,6 @@
         const weekCard = document.getElementById('week-total-card');
         const weekTotal = parseFloat(weekCard.getAttribute('data-week-total'));
         const weekMoMo = parseFloat(weekCard.getAttribute('data-week-momo'));
-        const weekAdvances = parseFloat(weekCard.getAttribute('data-week-advances'));
         
         const expensesCard = document.getElementById('week-expenses-card');
         const weekExpenses = parseFloat(expensesCard.getAttribute('data-week-expenses'));
@@ -199,15 +196,10 @@
         // Total MoMo
         document.getElementById('total-momo-value').innerHTML = 'GH₵' + weekMoMo.toFixed(2);
         
-        // Weekly Advances
-        document.getElementById('weekly-advances-value').innerHTML = 'GH₵' + weekAdvances.toFixed(2);
-        
-        // Net Profit (in green)
+        // Net Profit
         const totalCommission = weekTotal / 3;
         const netProfit = weekTotal - weekExpenses - totalCommission;
-        const netProfitElement = document.getElementById('net-profit-value');
-        netProfitElement.innerHTML = 'GH₵' + netProfit.toFixed(2);
-        netProfitElement.classList.add('text-success');
+        document.getElementById('net-profit-value').innerHTML = 'GH₵' + netProfit.toFixed(2);
     }
     
     // Load daily sales data for a selected day
