@@ -52,6 +52,9 @@ def dashboard():
         BarberAdvance.settled == False
     ).scalar() or 0
     
+    # Available Funds = Weekly Sales - (Expenses + Advances)
+    available_funds = week_total - (week_expenses_total + week_advances)
+    
     # Barber performance
     barbers = Barber.query.filter_by(active=True).all()
     barber_performance = []
@@ -67,7 +70,7 @@ def dashboard():
             'payout': commission - advances
         })
     
-    # Recent sales by barber (today, limit 5 per barber) - NEW
+    # Recent sales by barber (today, limit 5 per barber)
     recent_sales_by_barber = []
     for barber in barbers:
         barber_today_sales = Sale.query.filter(
@@ -101,6 +104,7 @@ def dashboard():
                          week_expenses=week_expenses_total,
                          week_momo=week_momo,
                          week_advances=week_advances,
+                         available_funds=available_funds,
                          barber_performance=barber_performance,
                          recent_sales_by_barber=recent_sales_by_barber,
                          week_days=week_days,
