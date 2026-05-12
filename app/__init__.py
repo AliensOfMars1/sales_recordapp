@@ -123,25 +123,39 @@ def create_app(config_class=Config):
         except Exception as e:
             print(f"⚠️ Migration check failed: {e}")
 
-        # Add sample data if database is empty
-        if Admin.query.count() == 0:
-            print("Creating sample data...")
-            
-            # Create admin
-            admin = Admin(username='admin', role='admin')
-            admin.set_password('barber2024')
+        # Update/Create admin and CEO with environment variables
+        admin_username = Config.ADMIN_USERNAME
+        admin_password = Config.ADMIN_PASSWORD
+        
+        ceo_username = Config.CEO_USERNAME
+        ceo_password = Config.CEO_PASSWORD
+        
+        # Update or create Admin
+        admin = Admin.query.filter_by(username=admin_username).first()
+        if admin:
+            admin.set_password(admin_password)
+            print(f"✓ Admin password updated")
+        else:
+            admin = Admin(username=admin_username, role='admin')
+            admin.set_password(admin_password)
             db.session.add(admin)
-            db.session.commit()
-            print("✓ Admin created")
-            
-            # Create CEO
-            ceo = Admin(username='ceo', role='ceo')
-            ceo.set_password('ceo2024')
+            print(f"✓ Admin created")
+        
+        # Update or create CEO
+        ceo = Admin.query.filter_by(username=ceo_username).first()
+        if ceo:
+            ceo.set_password(ceo_password)
+            print(f"✓ CEO password updated")
+        else:
+            ceo = Admin(username=ceo_username, role='ceo')
+            ceo.set_password(ceo_password)
             db.session.add(ceo)
-            db.session.commit()
-            print("✓ CEO created")
-            
-            # Sample barbers
+            print(f"✓ CEO created")
+        
+        db.session.commit()
+        
+        # Create sample barbers and services only if empty (preserve existing data)
+        if Barber.query.count() == 0:
             barbers = [
                 Barber(name='James Wilson', phone='+1234567890', email='james@barbershop.com'),
                 Barber(name='Michael Brown', phone='+1234567891', email='michael@barbershop.com'),
@@ -150,9 +164,9 @@ def create_app(config_class=Config):
             for barber in barbers:
                 db.session.add(barber)
             db.session.commit()
-            print("✓ Barbers created")
-            
-            # Sample services
+            print("✓ Sample barbers created")
+        
+        if Service.query.count() == 0:
             services = [
                 Service(name='Haircut', default_price=30.00, description='Classic haircut'),
                 Service(name='Beard Trim', default_price=15.00, description='Professional beard grooming'),
@@ -163,24 +177,28 @@ def create_app(config_class=Config):
             for service in services:
                 db.session.add(service)
             db.session.commit()
-            print("✓ Services created")
-            
-            # Add sample sales
-            today = date.today()
-            for i in range(5):
-                sale = Sale(
-                    barber_id=barbers[i % 3].id,
-                    service_id=services[i % 5].id,
-                    amount=services[i % 5].default_price,
-                    payment_method='cash' if i % 2 == 0 else 'momo',
-                    sale_date=today - timedelta(days=i),
-                    notes=f'Sample sale {i+1}'
-                )
-                db.session.add(sale)
-            db.session.commit()
-            print("✓ Sample sales created")
-            
-            # Add sample expense
+            print("✓ Sample services created")
+        
+        # Add sample sales only if none exist
+        if Sale.query.count() == 0:
+            barbers = Barber.query.all()
+            services = Service.query.all()
+            if barbers and services:
+                today = date.today()
+                for i in range(5):
+                    sale = Sale(
+                        barber_id=barbers[i % 3].id,
+                        service_id=services[i % 5].id,
+                        amount=services[i % 5].default_price,
+                        payment_method='cash' if i % 2 == 0 else 'momo',
+                        sale_date=today - timedelta(days=i),
+                        notes=f'Sample sale {i+1}'
+                    )
+                    db.session.add(sale)
+                db.session.commit()
+                print("✓ Sample sales created")
+        
+        if Expense.query.count() == 0:
             expense = Expense(
                 title='Monthly Rent',
                 amount=2000.00,
@@ -191,23 +209,23 @@ def create_app(config_class=Config):
             db.session.add(expense)
             db.session.commit()
             print("✓ Sample expense created")
-            
-            # Add sample advance
-            advance = BarberAdvance(
-                barber_id=barbers[0].id,
-                amount=50.00,
-                advance_date=today - timedelta(days=2),
-                note='Personal advance'
-            )
-            db.session.add(advance)
-            db.session.commit()
-            print("✓ Sample advance created")
-            
-            print("\n✅ Database initialized successfully with sample data!")
-            print(f"   Admin credentials: admin / barber2024")
-            print(f"   CEO credentials: ceo / ceo2024")
-            print(f"   Sample barbers: {len(barbers)}")
-            print(f"   Sample services: {len(services)}")
+        
+        if BarberAdvance.query.count() == 0:
+            barbers = Barber.query.all()
+            if barbers:
+                advance = BarberAdvance(
+                    barber_id=barbers[0].id,
+                    amount=50.00,
+                    advance_date=today - timedelta(days=2),
+                    note='Personal advance'
+                )
+                db.session.add(advance)
+                db.session.commit()
+                print("✓ Sample advance created")
+        
+        print(f"\n✅ Database ready!")
+        print(f"   Admin: {Config.ADMIN_USERNAME} / {Config.ADMIN_PASSWORD}")
+        print(f"   CEO: {Config.CEO_USERNAME} / {Config.CEO_PASSWORD}")
     
     return app
 

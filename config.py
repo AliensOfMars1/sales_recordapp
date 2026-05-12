@@ -17,10 +17,10 @@ class Config:
     
     PERMANENT_SESSION_LIFETIME = timedelta(days=7)
     
-    # Admin credentials
-    ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME') or 'admin'
-    ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD') or 'barber2024'
+    # Admin credentials (from environment or fallback)
+    ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME', 'admin')
+    ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'admin2024')
     
-    # CEO credentials
-    CEO_USERNAME = os.environ.get('CEO_USERNAME') or 'ceo'
-    CEO_PASSWORD = os.environ.get('CEO_PASSWORD') or 'ceo2024'
+    # CEO credentials (from environment or fallback)
+    CEO_USERNAME = os.environ.get('CEO_USERNAME', 'ceo')
+    CEO_PASSWORD = os.environ.get('CEO_PASSWORD', 'ceo2024')
