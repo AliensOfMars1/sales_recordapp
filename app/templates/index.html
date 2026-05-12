@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}TheNic'sBarbershop{% endblock %}
+{% block title %}TheNic'sSalon{% endblock %}
 
 {% block public_content %}
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand" href="#">The Nic's Barbershop</a>
+        <a class="navbar-brand" href="#">T.N.S</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -13,7 +13,7 @@
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="/about">Our Story</a></li>
-                <li class="nav-item"><a class="nav-link" href="/auth/login">Admin Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="/auth/login">Secretary Login</a></li>
                 <li class="nav-item"><a class="nav-link" href="/auth/barber-login">Barber Login</a></li>
             </ul>
         </div>
@@ -24,49 +24,12 @@
 <div class="position-relative overflow-hidden hero-index">
     <div class="container h-100 py-4 py-md-5">
         <div class="row align-items-start hero-index-row">
-            <!-- Left side text -->
             <div class="col-lg-6 text-white mt-3 mt-md-5 pt-md-3">
-                <h1 class="display-4 fw-bold">Welcome to The Nic's Barbershop</h1>
+                <h1 class="display-4 fw-bold">Welcome to The Nic's Salon</h1>
                 <p class="lead">Where style meets tradition. Experience the finest grooming services in town.</p>
                 <hr class="my-3 my-md-4 bg-white">
                 <p class="mb-3">Professional barbers, premium products, and a relaxing atmosphere. Visit us today!</p>
             </div>
-            
-            <!-- Right side Services Card -->
-            <!-- <div class="col-lg-5 offset-lg-1 mt-3 mt-md-n4">
-                <div class="card bg-dark bg-opacity-75 text-white border-0 shadow-lg">
-                    <div class="card-body p-3 p-md-4">
-                        <h3 class="card-title text-center mb-3 mb-md-4">
-                            <i class="fas fa-cut me-2"></i>Our Services
-                        </h3>
-                        <ul class="list-unstyled">
-                            <li class="mb-2 mb-md-3">
-                                <i class="fas fa-cut me-2 text-warning"></i>
-                                <strong>Classic Haircut</strong> - ₵30
-                            </li>
-                            <li class="mb-2 mb-md-3">
-                                <i class="fas fa-cut me-2 text-warning"></i>
-                                <strong>Beard Trim/ Shaving</strong> - ₵20
-                            </li>
-                            <li class="mb-2 mb-md-3">
-                                <i class="fas fa-scissors me-2 text-warning"></i>
-                                <strong>Black, Colored Hair Dying</strong> - ₵20 to ₵99
-                            </li>
-                            <li class="mb-2 mb-md-3">
-                                <i class="fas fa-scissors me-2 text-warning"></i>
-                                <strong>Kids Haircut + dye </strong> - ₵35
-                            </li>
-                            <li class="mb-2 mb-md-3">
-                                <i class="fas fa-child me-2 text-warning"></i>
-                                <strong>Kids Haircut</strong> - ₵20
-                            </li>
-                        </ul>
-                        <div class="text-center mt-2 mt-md-3">
-                            <a href="/auth/login" class="btn btn-outline-light btn-sm">Book Appointment</a>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
         </div>
     </div>
 </div>
@@ -74,29 +37,29 @@
 <div class="container mt-4 mt-md-5">
     <div class="row text-center">
         <div class="col-md-4 mb-3">
-            <div class="card border-0 shadow-sm">
+            <div class="card border-0 shadow-sm index-info-card">
                 <div class="card-body">
-                    <i class="fas fa-clock fa-3x text-primary mb-3"></i>
+                    <i class="fas fa-clock fa-3x mb-3"></i>
                     <h5>Opening Hours</h5>
                     <p>Mon-Sat: 9am - 8:30pm<br>Sun: 2am - 9pm</p>
                 </div>
             </div>
         </div>
         <div class="col-md-4 mb-3">
-            <div class="card border-0 shadow-sm">
+            <div class="card border-0 shadow-sm index-info-card">
                 <div class="card-body">
-                    <i class="fas fa-map-marker-alt fa-3x text-primary mb-3"></i>
+                    <i class="fas fa-map-marker-alt fa-3x mb-3"></i>
                     <h5>Location</h5>
                     <p>Aboum-Junction Opp In Him Is Life Supermarket<br>Kwabenya, Accra</p>
                 </div>
             </div>
         </div>
         <div class="col-md-4 mb-3">
-            <div class="card border-0 shadow-sm">
+            <div class="card border-0 shadow-sm index-info-card">
                 <div class="card-body">
-                    <i class="fas fa-phone fa-3x text-primary mb-3"></i>
+                    <i class="fas fa-phone fa-3x mb-3"></i>
                     <h5>Contact</h5>
-                    <p>Phone: (054) 147-7022<br>Email: info@thenicsbarbershop.com</p>
+                    <p>Phone: (054) 147-7022<br>Email: info@thenicsSalon.com</p>
                 </div>
             </div>
         </div>
@@ -107,7 +70,7 @@
     <div class="container py-4 py-md-5">
         <div class="row">
             <div class="col-md-4 mb-4">
-                <h4 class="mb-3">The Nic's Barbershop</h4>
+                <h4 class="mb-3">The Nic's Salon</h4>
                 <p>Where style meets tradition. Providing premium grooming services since 2020.</p>
                 <div class="mt-3">
                     <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-2x"></i></a>
@@ -138,9 +101,118 @@
         <hr class="bg-light">
         <div class="row">
             <div class="col text-center">
-                <p class="mb-0">&copy; 2024 The Nic's Barbershop. All rights reserved.</p>
+                <p class="mb-0">&copy; 2024 The Nic's Salon. All rights reserved.</p>
             </div>
         </div>
     </div>
 </footer>
+
+<!-- Cursor trail icons (visible, positioned absolutely) -->
+<i class="fas fa-cut flair" style="position: fixed; left: -100px; top: -100px;"></i>
+<i class="fas fa-scissors flair" style="position: fixed; left: -100px; top: -100px;"></i>
+<i class="fas fa-beard flair" style="position: fixed; left: -100px; top: -100px;"></i>
+<i class="fas fa-star flair" style="position: fixed; left: -100px; top: -100px;"></i>
+<i class="fas fa-crown flair" style="position: fixed; left: -100px; top: -100px;"></i>
+<i class="fas fa-magic flair" style="position: fixed; left: -100px; top: -100px;"></i>
+<i class="fas fa-sparkles flair" style="position: fixed; left: -100px; top: -100px;"></i>
+<i class="fas fa-gem flair" style="position: fixed; left: -100px; top: -100px;"></i>
+<i class="fas fa-cut flair" style="position: fixed; left: -100px; top: -100px;"></i>
+<i class="fas fa-scissors flair" style="position: fixed; left: -100px; top: -100px;"></i>
+<i class="fas fa-beard flair" style="position: fixed; left: -100px; top: -100px;"></i>
+<i class="fas fa-star flair" style="position: fixed; left: -100px; top: -100px;"></i>
+<i class="fas fa-crown flair" style="position: fixed; left: -100px; top: -100px;"></i>
+<i class="fas fa-magic flair" style="position: fixed; left: -100px; top: -100px;"></i>
+<i class="fas fa-sparkles flair" style="position: fixed; left: -100px; top: -100px;"></i>
+<i class="fas fa-gem flair" style="position: fixed; left: -100px; top: -100px;"></i>
+
+<!-- GSAP Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+<!-- Cursor Trail Script -->
+<script>
+// the timeline
+function playAnimation(shape) {
+    let tl = gsap.timeline();
+    tl.from(shape, {
+        opacity: 0,
+        scale: 0,
+        ease: "elastic.out(1,0.3)",
+    })
+    .to(shape, {
+        rotation: "random([-360, 360])",
+    }, "<")
+    .to(shape, {
+        y: "120vh",
+        ease: "back.in(.4)",
+        duration: 1,
+    }, 0)
+}
+
+// interaction props
+let gap = 100; // this number spaces the icons out
+
+let flair = gsap.utils.toArray(".flair");
+let index = 0;
+let wrapper = gsap.utils.wrap(0, flair.length);
+gsap.defaults({duration: 1})
+
+let mousePos = { x: 0, y: 0 };
+let lastMousePos = mousePos;
+let cachedMousePos = mousePos;
+
+window.addEventListener("mousemove", (e) => {
+    mousePos = {
+        x: e.clientX,
+        y: e.clientY
+    };
+});
+
+gsap.ticker.add(ImageTrail);
+
+function ImageTrail() {
+    let travelDistance = Math.hypot(
+        lastMousePos.x - mousePos.x,
+        lastMousePos.y - mousePos.y
+    );
+
+    cachedMousePos.x = gsap.utils.interpolate(
+        cachedMousePos.x || mousePos.x,
+        mousePos.x,
+        0.1
+    );
+    cachedMousePos.y = gsap.utils.interpolate(
+        cachedMousePos.y || mousePos.y,
+        mousePos.y,
+        0.1
+    );
+
+    if (travelDistance > gap) {
+        animateIcon();
+        lastMousePos = { x: mousePos.x, y: mousePos.y };
+    }
+}
+
+function animateIcon() {
+    let wrappedIndex = wrapper(index);
+    let icon = flair[wrappedIndex];
+    gsap.killTweensOf(icon);
+    
+    gsap.set(icon, {
+        clearProps: "all",
+    });
+
+    gsap.set(icon, {
+        left: mousePos.x,
+        top: mousePos.y,
+        xPercent: -50,
+        yPercent: -50,
+        fontSize: "30px",
+        color: "#DAA520",
+        opacity: 1,
+    });
+
+    playAnimation(icon);
+    index++;
+}
+</script>
 {% endblock %}

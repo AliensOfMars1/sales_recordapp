@@ -738,3 +738,64 @@ body {
 .recent-sales-container::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
+
+/* Dark info cards for index page */
+.index-info-card {
+    background: linear-gradient(135deg, rgba(30, 30, 40, 0.95), rgba(20, 20, 30, 0.95));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.index-info-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.index-info-card .card-body {
+    padding: 1.5rem;
+}
+
+.index-info-card i {
+    color: #DAA520 !important;
+    text-shadow: 0 0 10px rgba(218, 165, 32, 0.3);
+}
+
+.index-info-card h5 {
+    color: #fff;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.index-info-card p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+    .index-info-card .card-body {
+        padding: 1rem;
+    }
+    .index-info-card i {
+        font-size: 2rem;
+    }
+    .index-info-card h5 {
+        font-size: 1rem;
+    }
+    .index-info-card p {
+        font-size: 0.8rem;
+    }
+}
+
+
+/* Cursor trail icons */
+.flair {
+    position: fixed;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 9999;
+    font-size: 30px;
+}
