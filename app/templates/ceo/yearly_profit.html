@@ -1,0 +1,26 @@
+{% extends "ceo/base.html" %}
+
+{% block title %}Yearly Profit{% endblock %}
+{% block page_title %}Yearly Profit Overview{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-white"><h5>Net Profit by Year</h5></div>
+    <div class="card-body">
+        <canvas id="yearlyProfitChart" height="300"
+                data-years='{{ years|tojson }}'
+                data-profits='{{ yearly_profits|tojson }}'></canvas>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header bg-white"><h5>Profit Summary</h5></div>
+    <div class="card-body">
+        <div class="alert alert-success"><strong>{{ current_year }} Net Profit</strong><br><h2>GH₵{{ "%.2f"|format(yearly_profits[-1]) }}</h2></div>
+        <div class="alert alert-info"><strong>Average Annual Profit (Last 5 Years)</strong><br><h4>GH₵{{ "%.2f"|format(yearly_profits|sum / yearly_profits|length) }}</h4></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/ceo.js') }}"></script>
+{% endblock %}

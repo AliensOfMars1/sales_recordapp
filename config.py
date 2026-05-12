@@ -15,9 +15,12 @@ class Config:
         'sqlite:///' + os.path.join(instance_path, 'barbershop.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
-    # Session configuration
     PERMANENT_SESSION_LIFETIME = timedelta(days=7)
     
-    # Admin credentials (change in production)
+    # Admin credentials
     ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME') or 'admin'
     ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD') or 'barber2024'
+    
+    # CEO credentials
+    CEO_USERNAME = os.environ.get('CEO_USERNAME') or 'ceo'
+    CEO_PASSWORD = os.environ.get('CEO_PASSWORD') or 'ceo2024'

@@ -9,26 +9,47 @@ from config import Config
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('main.dashboard'))
+        # Check if logged in user is barber, CEO, or admin
+        if hasattr(current_user, 'name'):  # Barber has 'name' attribute
+            return redirect(url_for('barbers.barber_dashboard'))
+        elif hasattr(current_user, 'role') and current_user.role == 'ceo':
+            return redirect(url_for('ceo.dashboard'))
+        else:
+            return redirect(url_for('main.dashboard'))
     
     form = LoginForm()
     if form.validate_on_submit():
         admin = Admin.query.filter_by(username=form.username.data).first()
+        
+        # Create default admin if not exists
         if not admin and form.username.data == Config.ADMIN_USERNAME:
-            admin = Admin(username=Config.ADMIN_USERNAME)
+            admin = Admin(username=Config.ADMIN_USERNAME, role='admin')
             admin.set_password(Config.ADMIN_PASSWORD)
+            db.session.add(admin)
+            db.session.commit()
+        
+        # Create default CEO if not exists
+        if not admin and form.username.data == 'ceo':
+            admin = Admin(username='ceo', role='ceo')
+            admin.set_password('ceo2024')
             db.session.add(admin)
             db.session.commit()
         
         if admin and admin.check_password(form.password.data):
             login_user(admin, remember=True)
             next_page = request.args.get('next')
-            flash('Welcome back, Admin!', 'success')
-            return redirect(next_page) if next_page else redirect(url_for('main.dashboard'))
+            flash(f'Welcome back, {admin.username}!', 'success')
+            
+            # Redirect based on role
+            if admin.role == 'ceo':
+                return redirect(next_page) if next_page else redirect(url_for('ceo.dashboard'))
+            else:
+                return redirect(next_page) if next_page else redirect(url_for('main.dashboard'))
         else:
             flash('Invalid username or password', 'danger')
     
     return render_template('admin_login.html', form=form)
+
 
 @auth_bp.route('/barber-login', methods=['GET', 'POST'])
 def barber_login():
@@ -36,7 +57,11 @@ def barber_login():
         # If already logged in as barber, go to barber dashboard
         if hasattr(current_user, 'name'):  # Barber has 'name' attribute
             return redirect(url_for('barbers.barber_dashboard'))
-        return redirect(url_for('main.dashboard'))
+        # If logged in as admin or CEO, redirect to respective dashboard
+        elif hasattr(current_user, 'role') and current_user.role == 'ceo':
+            return redirect(url_for('ceo.dashboard'))
+        else:
+            return redirect(url_for('main.dashboard'))
     
     form = LoginForm()
     if form.validate_on_submit():
@@ -53,6 +78,7 @@ def barber_login():
             flash('Invalid credentials or account inactive', 'danger')
     
     return render_template('barber_login.html', form=form)
+
 
 @auth_bp.route('/logout')
 @login_required

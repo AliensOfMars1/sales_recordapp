@@ -27,6 +27,7 @@ def create_app(config_class=Config):
     from app.expenses import expenses_bp
     from app.barbers import barbers_bp
     from app.reports import reports_bp
+    from app.ceo import ceo_bp
     
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(main_bp, url_prefix='')
@@ -35,16 +36,37 @@ def create_app(config_class=Config):
     app.register_blueprint(expenses_bp, url_prefix='/expenses')
     app.register_blueprint(barbers_bp, url_prefix='/barbers')
     app.register_blueprint(reports_bp, url_prefix='/reports')
+    app.register_blueprint(ceo_bp)
     
     # Create tables and add sample data
     with app.app_context():
         db.create_all()
         
-        # === MIGRATION: Add settled_amount column if missing ===
+        # === MIGRATION: Add role column to admins ===
         try:
             import sqlite3
             db_uri = app.config['SQLALCHEMY_DATABASE_URI']
-            if db_uri.startswith('sqlite:///'):
+            if db_uri and db_uri.startswith('sqlite:///'):
+                db_path = db_uri.replace('sqlite:///', '')
+                conn = sqlite3.connect(db_path)
+                cursor = conn.cursor()
+                cursor.execute("PRAGMA table_info(admins)")
+                columns = [row[1] for row in cursor.fetchall()]
+                if 'role' not in columns:
+                    cursor.execute("ALTER TABLE admins ADD COLUMN role VARCHAR(20) DEFAULT 'admin'")
+                    conn.commit()
+                    print("✅ Added role column to admins table")
+                else:
+                    print("✓ role column already exists")
+                conn.close()
+        except Exception as e:
+            print(f"⚠️ Migration check failed: {e}")
+        
+        # === MIGRATION: Add settled_amount column to barber_advances ===
+        try:
+            import sqlite3
+            db_uri = app.config['SQLALCHEMY_DATABASE_URI']
+            if db_uri and db_uri.startswith('sqlite:///'):
                 db_path = db_uri.replace('sqlite:///', '')
                 conn = sqlite3.connect(db_path)
                 cursor = conn.cursor()
@@ -60,11 +82,11 @@ def create_app(config_class=Config):
         except Exception as e:
             print(f"⚠️ Migration check failed: {e}")
 
-        # === MIGRATION: Add password_hash column to barbers if missing ===
+        # === MIGRATION: Add password_hash column to barbers ===
         try:
             import sqlite3
             db_uri = app.config['SQLALCHEMY_DATABASE_URI']
-            if db_uri.startswith('sqlite:///'):
+            if db_uri and db_uri.startswith('sqlite:///'):
                 db_path = db_uri.replace('sqlite:///', '')
                 conn = sqlite3.connect(db_path)
                 cursor = conn.cursor()
@@ -79,11 +101,12 @@ def create_app(config_class=Config):
                 conn.close()
         except Exception as e:
             print(f"⚠️ Migration check failed: {e}")
-                # === MIGRATION: Add status and original_amount to sales table ===
+        
+        # === MIGRATION: Add status and original_amount to sales table ===
         try:
             import sqlite3
             db_uri = app.config['SQLALCHEMY_DATABASE_URI']
-            if db_uri.startswith('sqlite:///'):
+            if db_uri and db_uri.startswith('sqlite:///'):
                 db_path = db_uri.replace('sqlite:///', '')
                 conn = sqlite3.connect(db_path)
                 cursor = conn.cursor()
@@ -98,18 +121,25 @@ def create_app(config_class=Config):
                 conn.commit()
                 conn.close()
         except Exception as e:
-            print(f"⚠️ Migration check failed: {e}")    
+            print(f"⚠️ Migration check failed: {e}")
 
         # Add sample data if database is empty
         if Admin.query.count() == 0:
             print("Creating sample data...")
             
             # Create admin
-            admin = Admin(username='admin')
+            admin = Admin(username='admin', role='admin')
             admin.set_password('barber2024')
             db.session.add(admin)
             db.session.commit()
             print("✓ Admin created")
+            
+            # Create CEO
+            ceo = Admin(username='ceo', role='ceo')
+            ceo.set_password('ceo2024')
+            db.session.add(ceo)
+            db.session.commit()
+            print("✓ CEO created")
             
             # Sample barbers
             barbers = [
@@ -137,7 +167,7 @@ def create_app(config_class=Config):
             
             # Add sample sales
             today = date.today()
-            for i in range(5):  # Add 5 sample sales
+            for i in range(5):
                 sale = Sale(
                     barber_id=barbers[i % 3].id,
                     service_id=services[i % 5].id,
@@ -162,9 +192,9 @@ def create_app(config_class=Config):
             db.session.commit()
             print("✓ Sample expense created")
             
-            # Add sample advance (now barbers exist)
+            # Add sample advance
             advance = BarberAdvance(
-                barber_id=barbers[0].id,  # James Wilson
+                barber_id=barbers[0].id,
                 amount=50.00,
                 advance_date=today - timedelta(days=2),
                 note='Personal advance'
@@ -175,12 +205,13 @@ def create_app(config_class=Config):
             
             print("\n✅ Database initialized successfully with sample data!")
             print(f"   Admin credentials: admin / barber2024")
+            print(f"   CEO credentials: ceo / ceo2024")
             print(f"   Sample barbers: {len(barbers)}")
             print(f"   Sample services: {len(services)}")
     
     return app
 
-# Blueprint initialization files (create these as separate files)
+# Blueprint initialization files
 from app.auth import auth_bp
 from app.main import main_bp
 from app.sales import sales_bp
@@ -188,3 +219,4 @@ from app.services import services_bp
 from app.expenses import expenses_bp
 from app.barbers import barbers_bp
 from app.reports import reports_bp
+from app.ceo import ceo_bp

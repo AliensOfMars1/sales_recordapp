@@ -1,0 +1,25 @@
+{% extends "ceo/base.html" %}
+
+{% block title %}CEO Dashboard{% endblock %}
+{% block page_title %}Business Performance Overview{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3"><div class="ceo-stat-card"><h6>Weekly Sales</h6><h3>GH₵{{ "%.2f"|format(week_total) }}</h3></div></div>
+    <div class="col-md-3"><div class="ceo-stat-card"><h6>Weekly Expenses</h6><h3>GH₵{{ "%.2f"|format(week_expenses) }}</h3></div></div>
+    <div class="col-md-3"><div class="ceo-stat-card"><h6>Weekly Net Profit</h6><h3 class="text-success">GH₵{{ "%.2f"|format(week_net_profit) }}</h3></div></div>
+    <div class="col-md-3"><div class="ceo-stat-card"><h6>YTD Net Profit</h6><h3 class="text-success">GH₵{{ "%.2f"|format(ytd_net_profit) }}</h3></div></div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header bg-white"><h5>Net Profit Trend (Last 12 Months)</h5></div>
+    <div class="card-body">
+        <canvas id="profitChart" height="250" 
+                data-labels='{{ months_labels|tojson }}' 
+                data-profits='{{ monthly_net_profit|tojson }}'></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/ceo.js') }}"></script>
+{% endblock %}

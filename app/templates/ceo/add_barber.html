@@ -1,0 +1,19 @@
+{% extends "ceo/base.html" %}
+
+{% block title %}Add Barber{% endblock %}
+{% block page_title %}Add New Barber{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3"><label class="form-label">Name</label><input type="text" name="name" class="form-control" required></div>
+            <div class="mb-3"><label class="form-label">Phone</label><input type="text" name="phone" class="form-control"></div>
+            <div class="mb-3"><label class="form-label">Email</label><input type="email" name="email" class="form-control"></div>
+            <div class="mb-3 form-check"><input type="checkbox" name="active" value="true" class="form-check-input" checked><label class="form-check-label">Active</label></div>
+            <button type="submit" class="btn btn-primary">Save Barber</button>
+            <a href="{{ url_for('ceo.barbers') }}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

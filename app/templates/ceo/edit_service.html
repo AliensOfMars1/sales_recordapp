@@ -1,0 +1,19 @@
+{% extends "ceo/base.html" %}
+
+{% block title %}Edit Service{% endblock %}
+{% block page_title %}Edit Service{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3"><label class="form-label">Service Name</label><input type="text" name="name" class="form-control" value="{{ service.name }}" required></div>
+            <div class="mb-3"><label class="form-label">Price (GH₵)</label><input type="number" name="default_price" class="form-control" step="0.01" value="{{ service.default_price }}" required></div>
+            <div class="mb-3"><label class="form-label">Description</label><textarea name="description" class="form-control" rows="3">{{ service.description or '' }}</textarea></div>
+            <div class="mb-3 form-check"><input type="checkbox" name="active" value="true" class="form-check-input" {% if service.active %}checked{% endif %}><label class="form-check-label">Active</label></div>
+            <button type="submit" class="btn btn-primary">Update Service</button>
+            <a href="{{ url_for('ceo.services') }}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
