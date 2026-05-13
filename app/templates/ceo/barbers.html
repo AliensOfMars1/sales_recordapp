@@ -1,0 +1,51 @@
+{% extends "ceo/base.html" %}
+
+{% block title %}Manage Barbers{% endblock %}
+{% block page_title %}Barber Management{% endblock %}
+
+{% block content %}
+<div class="mb-3">
+    <a href="{{ url_for('ceo.add_barber') }}" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>Add New Barber
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-header bg-white">
+        <h5>Current Barbers</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for barber in barbers %}
+                    <tr>
+                        <td>{{ barber.name }}</td>
+                        <td>{{ barber.phone or '-' }}</td>
+                        <td>{{ barber.email or '-' }}</td>
+                        <td>{% if barber.active %}<span class="badge bg-success">Active</span>{% else %}<span class="badge bg-secondary">Inactive</span>{% endif %}</td>
+                        <td class="text-center">
+                            <a href="{{ url_for('ceo.edit_barber', barber_id=barber.id) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Edit</a>
+                            <a href="{{ url_for('ceo.delete_barber', barber_id=barber.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Delete this barber?')"><i class="fas fa-trash"></i> Delete</a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center">No barbers found</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

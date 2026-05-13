@@ -1,0 +1,49 @@
+{% extends "ceo/base.html" %}
+
+{% block title %}Expense Analysis{% endblock %}
+{% block page_title %}Expense Analysis{% endblock %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header bg-white d-flex justify-content-between">
+        <h5>Monthly Expenses ({{ selected_year }})</h5>
+        <form method="GET" class="d-flex">
+            <select name="year" class="form-select form-select-sm w-auto" onchange="this.form.submit()">
+                {% for y in years %}
+                <option value="{{ y }}" {% if y == selected_year %}selected{% endif %}>{{ y }}</option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+    <div class="card-body">
+        <canvas id="monthlyExpenseChart" height="250"
+                data-months='{{ months|tojson }}'
+                data-expenses='{{ monthly_expenses|tojson }}'></canvas>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header bg-white"><h5>Expenses by Category ({{ selected_year }})</h5></div>
+            <div class="card-body">
+                <canvas id="categoryChart"
+                        data-categories='{{ categories|tojson }}'
+                        data-amounts='{{ category_amounts|tojson }}'></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header bg-white"><h5>Summary</h5></div>
+            <div class="card-body">
+                <div class="alert alert-info"><strong>Total Expenses for {{ selected_year }}</strong><br><h3>GH₵{{ "%.2f"|format(total_expenses) }}</h3></div>
+                <div class="alert alert-success"><strong>Average Monthly Expenses</strong><br><h4>GH₵{{ "%.2f"|format(total_expenses/12) }}</h4></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/ceo.js') }}"></script>
+{% endblock %}
