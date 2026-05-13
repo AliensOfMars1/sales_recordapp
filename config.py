@@ -19,7 +19,7 @@ class Config:
     
     # Admin credentials (from environment or fallback)
     ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME', 'admin')
-    ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'admin2024')
+    ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'barber2024')
     
     # CEO credentials (from environment or fallback)
     CEO_USERNAME = os.environ.get('CEO_USERNAME', 'ceo')
