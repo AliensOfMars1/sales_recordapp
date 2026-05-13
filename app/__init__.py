@@ -123,38 +123,62 @@ def create_app(config_class=Config):
         except Exception as e:
             print(f"⚠️ Migration check failed: {e}")
 
-        # Update/Create admin and CEO with environment variables
+        # ========== UPDATE/CREATE ADMIN AND CEO WITH ENVIRONMENT VARIABLES ==========
+        
+        # Get credentials from config (which reads from environment)
         admin_username = Config.ADMIN_USERNAME
         admin_password = Config.ADMIN_PASSWORD
         
         ceo_username = Config.CEO_USERNAME
         ceo_password = Config.CEO_PASSWORD
         
-        # Update or create Admin
+        print(f"📌 Using admin credentials from config: {admin_username}")
+        print(f"📌 Using CEO credentials from config: {ceo_username}")
+        
+        # Handle Admin user
         admin = Admin.query.filter_by(username=admin_username).first()
         if admin:
+            # Update existing admin password
             admin.set_password(admin_password)
-            print(f"✓ Admin password updated")
+            if admin.role != 'admin':
+                admin.role = 'admin'
+            print(f"✓ Admin password updated to environment value")
         else:
+            # Create new admin
             admin = Admin(username=admin_username, role='admin')
             admin.set_password(admin_password)
             db.session.add(admin)
-            print(f"✓ Admin created")
+            print(f"✓ Admin created with environment password")
         
-        # Update or create CEO
+        # Handle CEO user
         ceo = Admin.query.filter_by(username=ceo_username).first()
         if ceo:
+            # Update existing CEO password
             ceo.set_password(ceo_password)
-            print(f"✓ CEO password updated")
+            if ceo.role != 'ceo':
+                ceo.role = 'ceo'
+            print(f"✓ CEO password updated to environment value")
         else:
+            # Create new CEO
             ceo = Admin(username=ceo_username, role='ceo')
             ceo.set_password(ceo_password)
             db.session.add(ceo)
-            print(f"✓ CEO created")
+            print(f"✓ CEO created with environment password")
+        
+        # Also remove any default 'admin' user if it exists and username is different
+        if admin_username != 'admin':
+            default_admin = Admin.query.filter_by(username='admin').first()
+            if default_admin and default_admin.id != admin.id:
+                # Don't delete, just warn - but we can keep it
+                print(f"⚠️ Default 'admin' user still exists (username: admin)")
         
         db.session.commit()
         
-        # Create sample barbers and services only if empty (preserve existing data)
+        # ========== SAMPLE DATA (only if empty) ==========
+        
+        today = date.today()
+        
+        # Sample barbers
         if Barber.query.count() == 0:
             barbers = [
                 Barber(name='James Wilson', phone='+1234567890', email='james@barbershop.com'),
@@ -165,7 +189,10 @@ def create_app(config_class=Config):
                 db.session.add(barber)
             db.session.commit()
             print("✓ Sample barbers created")
+        else:
+            print("✓ Barbers already exist, skipping sample data")
         
+        # Sample services
         if Service.query.count() == 0:
             services = [
                 Service(name='Haircut', default_price=30.00, description='Classic haircut'),
@@ -178,13 +205,14 @@ def create_app(config_class=Config):
                 db.session.add(service)
             db.session.commit()
             print("✓ Sample services created")
+        else:
+            print("✓ Services already exist, skipping sample data")
         
-        # Add sample sales only if none exist
+        # Sample sales
         if Sale.query.count() == 0:
             barbers = Barber.query.all()
             services = Service.query.all()
             if barbers and services:
-                today = date.today()
                 for i in range(5):
                     sale = Sale(
                         barber_id=barbers[i % 3].id,
@@ -197,7 +225,10 @@ def create_app(config_class=Config):
                     db.session.add(sale)
                 db.session.commit()
                 print("✓ Sample sales created")
+        else:
+            print("✓ Sales already exist, skipping sample data")
         
+        # Sample expense
         if Expense.query.count() == 0:
             expense = Expense(
                 title='Monthly Rent',
@@ -209,7 +240,10 @@ def create_app(config_class=Config):
             db.session.add(expense)
             db.session.commit()
             print("✓ Sample expense created")
+        else:
+            print("✓ Expenses already exist, skipping sample data")
         
+        # Sample advance
         if BarberAdvance.query.count() == 0:
             barbers = Barber.query.all()
             if barbers:
@@ -222,10 +256,12 @@ def create_app(config_class=Config):
                 db.session.add(advance)
                 db.session.commit()
                 print("✓ Sample advance created")
+        else:
+            print("✓ Advances already exist, skipping sample data")
         
         print(f"\n✅ Database ready!")
-        print(f"   Admin: {Config.ADMIN_USERNAME} / {Config.ADMIN_PASSWORD}")
-        print(f"   CEO: {Config.CEO_USERNAME} / {Config.CEO_PASSWORD}")
+        print(f"   Admin login: {Config.ADMIN_USERNAME} / {Config.ADMIN_PASSWORD}")
+        print(f"   CEO login: {Config.CEO_USERNAME} / {Config.CEO_PASSWORD}")
     
     return app
 
