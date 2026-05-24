@@ -19,17 +19,20 @@ def login():
     
     form = LoginForm()
     if form.validate_on_submit():
-        admin = Admin.query.filter_by(username=form.username.data).first()
+        # Trim spaces from username
+        username = form.username.data.strip()
+        
+        admin = Admin.query.filter_by(username=username).first()
         
         # Create default admin if not exists
-        if not admin and form.username.data == Config.ADMIN_USERNAME:
+        if not admin and username == Config.ADMIN_USERNAME:
             admin = Admin(username=Config.ADMIN_USERNAME, role='admin')
             admin.set_password(Config.ADMIN_PASSWORD)
             db.session.add(admin)
             db.session.commit()
         
         # Create default CEO if not exists
-        if not admin and form.username.data == 'ceo':
+        if not admin and username == 'ceo':
             admin = Admin(username='ceo', role='ceo')
             admin.set_password('ceo2024')
             db.session.add(admin)
@@ -65,10 +68,13 @@ def barber_login():
     
     form = LoginForm()
     if form.validate_on_submit():
-        # Try to find barber by email or name
-        barber = Barber.query.filter_by(email=form.username.data).first()
+        # Trim spaces from username
+        username = form.username.data.strip()
+        
+        # Try to find barber by email or name (trimmed)
+        barber = Barber.query.filter_by(email=username).first()
         if not barber:
-            barber = Barber.query.filter_by(name=form.username.data).first()
+            barber = Barber.query.filter_by(name=username).first()
         
         if barber and barber.active and barber.check_password(form.password.data):
             login_user(barber, remember=True)
