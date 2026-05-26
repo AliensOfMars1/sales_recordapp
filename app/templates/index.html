@@ -1,218 +1,1037 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>The Nic's Salon | The Hairbeat Of Africa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+            width: 100%;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #b2b4b4;
+            overflow-x: hidden;
+            width: 100%;
+            position: relative;
+        }
+        
+        /* Hero background  */
+        .hero-bg {
+            background-image: url("{{ url_for('static', filename='img/hero4.jpg') }}");
+            background-size: cover;
+            background-position: center;
+        }
+        .text-shadow {
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+        .fade-in-element {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-element.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-{% block title %}TheNic'sSalon{% endblock %}
+        /* Mobile-first responsive header */
+        #main-header {
+            min-height: 100vh;
+            position: relative;
+            z-index: 50;
+            transition: all 0.4s ease-in-out;
+            width: 100%;
+            overflow-x: hidden;
+        }
+        
+        #hero-content {
+            transition: opacity 0.3s ease-in-out;
+            padding: 2rem 1rem;
+        }
+        
+        /* Sticky nav - ALWAYS VISIBLE with hamburger */
+        #sticky-nav-content {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #1e1e1e;
+            transform: translateY(0);
+            transition: transform 0.4s ease-in-out;
+            z-index: 100;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Desktop navigation */
+        .desktop-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+        
+        /* Mobile menu button - hidden on desktop */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            z-index: 101;
+        }
+        
+        .mobile-menu-btn span {
+            display: block;
+            width: 25px;
+            height: 2px;
+            background-color: white;
+            margin: 5px 0;
+            transition: 0.3s;
+        }
+        
+        /* Mobile navigation panel */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100vh;
+            background-color: #1e1e1e;
+            z-index: 200;
+            transition: right 0.3s ease-in-out;
+            padding: 5rem 1.5rem;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.3);
+        }
+        
+        .mobile-nav.active {
+            right: 0;
+        }
+        
+        .mobile-nav ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .mobile-nav ul li {
+            margin-bottom: 1.5rem;
+        }
+        
+        .mobile-nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: color 0.2s;
+            display: block;
+            padding: 0.5rem 0;
+        }
+        
+        .mobile-nav ul li a:hover {
+            color: #ca6060;
+        }
+        
+        .close-menu {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+        
+        /* Overlay when mobile menu is open */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 150;
+            display: none;
+        }
+        
+        .menu-overlay.active {
+            display: block;
+        }
+        
+        /* Desktop nav links */
+        .nav-links-desktop {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            list-style: none;
+        }
+        
+        .nav-links-desktop li a {
+            color: #e8e6e3;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.3px;
+            transition: 0.25s ease;
+            padding: 0.5rem 0;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+        }
+        
+        .nav-links-desktop li a:hover {
+            color: #ca6060;
+            border-bottom-color: #ca6060;
+        }
+        
+        /* Main content container - prevent overflow */
+        #main-content {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        
+        /* Mobile responsive - FIXED horizontal scroll */
+        @media (max-width: 768px) {
+            .desktop-nav {
+                justify-content: space-between;
+            }
+            
+            .nav-links-desktop {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-content p {
+                font-size: 0.9rem;
+            }
+            
+            .btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            section h2 {
+                font-size: 1.5rem !important;
+            }
+            
+            .grid {
+                gap: 1rem;
+            }
+            
+            .gallery-grid {
+                gap: 0.75rem;
+            }
+            
+            .gallery-grid img {
+                height: 180px;
+            }
+            
+            #hero-content {
+                padding-top: 80px;
+            }
+            
+            .story-section {
+                padding: 2rem 1rem;
+            }
+            
+            .story-header h2 {
+                font-size: 1.8rem;
+            }
+            
+            .team-grid {
+                gap: 1.5rem;
+            }
+            
+            .barber-container {
+                width: 220px;
+                height: 220px;
+            }
+            
+            .barber-name {
+                font-size: 18px;
+            }
+            
+            .barber-title {
+                font-size: 11px;
+            }
+            
+            .footer-icons {
+                gap: 1rem;
+            }
+            
+            .footer-icons svg {
+                width: 24px;
+                height: 24px;
+            }
+            
+            /* Prevent overflow on cards */
+            .person {
+                width: 100%;
+                max-width: 240px;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-bg {
+                background-position: 30% center;
+            }
+            .action-btns {
+                flex-direction: column;
+                width: 100%;
+                gap: 0.75rem;
+            }
+            .action-btns .btn {
+                width: 100%;
+                text-align: center;
+            }
+            .barber-container {
+                width: 160px;
+                height: 160px;
+            }
+            .person {
+                width: 100%;
+                max-width: 180px;
+            }
+            .barber-name {
+                font-size: 14px;
+            }
+            .barber-title {
+                font-size: 9px;
+            }
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            .gallery-grid img {
+                height: 200px;
+            }
+        }
+        
+        /* Gallery responsive grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            width: 100%;
+        }
+        
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.7s ease-in-out;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .faq-item.active .icon-plus {
+            transform: rotate(45deg);
+        }
+        .icon-plus {
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        /* Custom accent color */
+        .accent-color {
+            color: #ca6060;
+        }
+        .bg-accent {
+            background-color: #ca6060;
+        }
+        
+        /* Animation for scroll down button */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-bounce {
+            animation: bounce 2s infinite;
+        }
+        
+        /* Image styling */
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            aspect-ratio: 4/3;
+        }
 
-{% block public_content %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="#">T.N.S</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="/about">Our Story</a></li>
-                <li class="nav-item"><a class="nav-link" href="/auth/login">Admins Login</a></li>
-                <li class="nav-item"><a class="nav-link" href="/auth/barber-login">Barber Login</a></li>
+        /* Barbers Section Styles */
+        .story-section {
+            background-color: #fefaf5;
+            padding: 5rem 2rem;
+            width: 100%;
+        }
+
+        .story-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .story-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .story-header h2 {
+            font-family: "Merriweather", serif;
+            font-size: 2.7rem;
+            color: #2d2a26;
+            letter-spacing: -0.3px;
+        }
+
+        .story-header p {
+            color: #7c6f62;
+            max-width: 550px;
+            margin: 0.8rem auto 0;
+            font-size: 1.05rem;
+        }
+
+        .team-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 3rem;
+            width: 100%;
+        }
+
+        .person {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            width: 280px;
+            max-width: 100%;
+            transition: transform 0.25s ease;
+        }
+
+        .person:hover {
+            transform: translateY(-6px);
+        }
+
+        .barber-container {
+            border-radius: 50%;
+            height: 312px;
+            width: 312px;
+            max-width: 100%;
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            margin-bottom: 0.5rem;
+            background: linear-gradient(145deg, #fff6ed, #feead9);
+            box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .barber-container:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .barber-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+            transition: transform 0.4s ease;
+            display: block;
+            border-radius: 50%;
+        }
+
+        .barber-container:hover .barber-img {
+            transform: scale(1.04);
+        }
+
+        .barber-container::after {
+            content: "";
+            position: absolute;
+            inset: 6px;
+            border-radius: 50%;
+            border: 1px solid rgba(202, 96, 96, 0.2);
+            pointer-events: none;
+        }
+
+        .barber-divider {
+            background-color: #ca6060;
+            height: 2px;
+            width: 70px;
+            margin: 1.2rem 0 0.8rem;
+            border-radius: 2px;
+        }
+
+        .barber-name {
+            color: #2b2a28;
+            font-size: 26px;
+            font-weight: 700;
+            margin-top: 12px;
+            text-align: center;
+            letter-spacing: -0.2px;
+        }
+
+        .barber-title {
+            color: #7a6b5e;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            margin-top: 4px;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 768px) {
+            .story-section {
+                padding: 3rem 1rem;
+            }
+            .story-header h2 {
+                font-size: 2rem;
+            }
+            .team-grid {
+                gap: 2rem;
+            }
+            .barber-container {
+                width: 220px;
+                height: 220px;
+            }
+            .barber-name {
+                font-size: 18px;
+            }
+            .barber-title {
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .barber-container {
+                width: 160px;
+                height: 160px;
+            }
+            .person {
+                width: 100%;
+                max-width: 180px;
+            }
+            .barber-name {
+                font-size: 14px;
+            }
+            .barber-title {
+                font-size: 9px;
+            }
+            .barber-divider {
+                width: 40px;
+            }
+        }
+        
+        /* Services grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            width: 100%;
+        }
+        
+        @media (max-width: 768px) {
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Footer */
+        footer {
+            width: 100%;
+            overflow-x: hidden;
+        }
+        
+        footer .container {
+            width: 100%;
+            max-width: 100%;
+            padding: 0 1rem;
+        }
+        
+        .footer-icons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+        
+        /* Location section */
+        .location-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .location-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <header id="main-header" class="hero-bg relative text-white">
+        <div id="hero-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
+        
+        <!-- Sticky nav content with hamburger menu -->
+        <div id="sticky-nav-content">
+            <div class="container mx-auto px-4 py-3 md:py-4">
+                <div class="desktop-nav">
+                    <h2 class="text-lg md:text-xl font-bold text-white">The Nic's Salon</h2>
+                    
+                    <!-- Desktop Navigation -->
+                    <nav>
+                        <ul class="nav-links-desktop">
+                            <li><a href="#services" class="nav-link">Services</a></li>
+                            <li><a href="#gallery" class="nav-link">Gallery</a></li>
+                            <li><a href="#our-barbers" class="nav-link">Our Barbers</a></li>
+                            <li><a href="#location" class="nav-link">Visit</a></li>
+                            <li><a href="#faq" class="nav-link">FAQ</a></li>
+                            <li><a href="/auth/login" class="nav-link">Admins Login</a></li>
+                            <li><a href="/auth/barber-login" class="nav-link">Barber Login</a></li>
+                        </ul>
+                    </nav>
+                    
+                    <!-- Mobile Hamburger Button -->
+                    <button class="mobile-menu-btn" id="menuToggle">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Navigation Panel -->
+        <div class="mobile-nav" id="mobileNav">
+            <button class="close-menu" id="closeMenu">&times;</button>
+            <ul>
+                <li><a href="#services" class="mobile-nav-link">Services</a></li>
+                <li><a href="#gallery" class="mobile-nav-link">Gallery</a></li>
+                <li><a href="#our-barbers" class="mobile-nav-link">Our Barbers</a></li>
+                <li><a href="#location" class="mobile-nav-link">Visit</a></li>
+                <li><a href="#faq" class="mobile-nav-link">FAQ</a></li>
+                <li><a href="/auth/login" class="mobile-nav-link">Admins Login</a></li>
+                <li><a href="/auth/barber-login" class="mobile-nav-link">Barber Login</a></li>
             </ul>
         </div>
-    </div>
-</nav>
+        
+        <!-- Overlay -->
+        <div class="menu-overlay" id="menuOverlay"></div>
+        
+        <!-- Full-screen hero content -->
+        <div id="hero-content" class="relative container mx-auto px-4 min-h-screen flex flex-col justify-center items-center text-center">
+            <div>
+                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-shadow">The Nic's Salon</h1>
+                <p class="mt-4 text-lg md:text-xl text-gray-200 max-w-2xl mx-auto text-shadow">We're the Hairbeat Of Africa.</p>
+                <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="#location" class="bg-[#ca6060] text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-[#b04f4f] transition-colors shadow-lg w-full sm:w-auto text-center">Book Now</a>
+                    <a href="tel:0541477022" class="bg-transparent border-2 border-white text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-white hover:text-[#1e1e1e] transition-colors shadow-lg w-full sm:w-auto text-center">Call Us: 054 147 7022</a>
+                </div>
+            </div>
+             <a href="#services" id="scroll-down-button" class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce focus:outline-none">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </a>
+        </div>
+    </header>
 
-<!-- Hero Section with Background Image and Services on Right -->
-<div class="position-relative overflow-hidden hero-index">
-    <div class="container h-100 py-4 py-md-5">
-        <div class="row align-items-start hero-index-row">
-            <div class="col-lg-6 text-white mt-3 mt-md-5 pt-md-3">
-                <h1 class="display-4 fw-bold">Welcome to The Nic's Salon</h1>
-                <p class="lead">Where style meets tradition. Experience the finest grooming services in town.</p>
-                <hr class="my-3 my-md-4 bg-white">
-                <p class="mb-3">Professional barbers, premium products, and a relaxing atmosphere. Visit us today!</p>
-            </div>
-        </div>
-    </div>
-</div>
+    <!-- Main Content Wrapper -->
+    <main id="main-content" class="container mx-auto px-4 pt-16 md:pt-24 pb-12 md:pb-16">
 
-<div class="container mt-4 mt-md-5">
-    <div class="row text-center">
-        <div class="col-md-4 mb-3">
-            <div class="card border-0 shadow-sm index-info-card">
-                <div class="card-body">
-                    <i class="fas fa-clock fa-3x mb-3"></i>
-                    <h5>Opening Hours</h5>
-                    <p>Mon-Sat: 9am - 8:30pm<br>Sun: 2am - 9pm</p>
+        <!-- Services & Pricing Section -->
+        <section id="services" class="mb-12 md:mb-16">
+            <h2 class="text-2xl md:text-4xl font-bold text-center text-gray-800 mb-8 md:mb-10">Our Services & Pricing</h2>
+            <p class="text-center text-base md:text-lg text-gray-700 font-semibold mb-8 md:mb-10">Walk-ins only, no bookings required</p>
+            <div class="services-grid max-w-6xl mx-auto">
+                <div class="fade-in-element bg-white p-5 md:p-6 rounded-lg shadow-lg border border-gray-200">
+                    <h3 class="text-xl md:text-2xl font-bold text-center text-gray-800 mb-4">Standard Cuts</h3>
+                    <ul class="space-y-3 text-base md:text-lg text-gray-700">
+                        <li class="flex justify-between border-b border-gray-200 pb-2"><span>Under 15</span><span class="font-semibold">GHS 20</span></li>
+                        <li class="flex justify-between border-b border-gray-200 pb-2"><span>Over 15</span><span class="font-semibold">GHS 30</span></li>
+                        <li class="flex justify-between border-b border-gray-200 pb-2"><span>Perm Cut</span><span class="font-semibold">GHS 50</span></li>
+                    </ul>
+                </div>
+                <div class="fade-in-element bg-white p-5 md:p-6 rounded-lg shadow-lg border border-gray-200">
+                    <h3 class="text-xl md:text-2xl font-bold text-center text-gray-800 mb-4">Cut and Dye</h3>
+                    <ul class="space-y-3 text-base md:text-lg text-gray-700">
+                        <li class="flex justify-between border-b border-gray-200 pb-2"><span>Under 15</span><span class="font-semibold">GHS 35</span></li>
+                        <li class="flex justify-between"><span>Over 15</span><span class="font-semibold">GHS 50</span></li>
+                    </ul>
+                </div>
+                <div class="fade-in-element bg-white p-5 md:p-6 rounded-lg shadow-lg border border-gray-200">
+                    <h3 class="text-xl md:text-2xl font-bold text-center text-gray-800 mb-4">Beard & Shave</h3>
+                    <ul class="space-y-3 text-base md:text-lg text-gray-700">
+                        <li class="flex justify-between border-b border-gray-200 pb-2"><span>Beard Trim</span><span class="font-semibold">GHS 20</span></li>
+                        <li class="flex justify-between"><span>Hairline Shaping</span><span class="font-semibold">GHS 20</span></li>
+                    </ul>
                 </div>
             </div>
-        </div>
-        <div class="col-md-4 mb-3">
-            <div class="card border-0 shadow-sm index-info-card">
-                <div class="card-body">
-                    <i class="fas fa-map-marker-alt fa-3x mb-3"></i>
-                    <h5>Location</h5>
-                    <p>Aboum-Junction Opp In Him Is Life Supermarket<br>Kwabenya, Accra</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-3">
-            <div class="card border-0 shadow-sm index-info-card">
-                <div class="card-body">
-                    <i class="fas fa-phone fa-3x mb-3"></i>
-                    <h5>Contact</h5>
-                    <p>Phone: (054) 147-7022<br>Email: info@thenicsSalon.com</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+        </section>
 
-<footer class="mt-4 mt-md-5 position-relative footer-bg">
-    <div class="container py-4 py-md-5">
-        <div class="row">
-            <div class="col-md-4 mb-4">
-                <h4 class="mb-3">The Nic's Salon</h4>
-                <p>Where style meets tradition. Providing premium grooming services since 2020.</p>
-                <div class="mt-3">
-                    <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-2x"></i></a>
-                    <a href="#" class="text-white me-3"><i class="fab fa-instagram fa-2x"></i></a>
-                    <a href="#" class="text-white me-3"><i class="fab fa-twitter fa-2x"></i></a>
-                    <a href="#" class="text-white"><i class="fab fa-whatsapp fa-2x"></i></a>
+        <!-- Gallery Section -->
+        <section id="gallery" class="mb-12 md:mb-16">
+            <h2 class="text-2xl md:text-4xl font-bold text-center text-gray-800 mb-8 md:mb-10">Gallery</h2>
+            <div class="gallery-grid max-w-6xl mx-auto">
+                <div class="fade-in-element rounded-lg overflow-hidden shadow-lg">
+                    <img src="{{ url_for('static', filename='img/interior.jpg') }}" alt="Salon Interior" class="gallery-img" onerror="this.src='https://placehold.co/600x400/e5e7eb/9ca3af?text=Salon+Interior'">
+                </div>
+                <div class="fade-in-element rounded-lg overflow-hidden shadow-lg">
+                    <img src="{{ url_for('static', filename='img/barber-chair.jpg') }}" alt="Barber Chair" class="gallery-img" onerror="this.src='https://placehold.co/600x400/e5e7eb/9ca3af?text=Barber+Chair'">
+                </div>
+                <div class="fade-in-element rounded-lg overflow-hidden shadow-lg">
+                    <img src="{{ url_for('static', filename='img/hair-style.jpg') }}" alt="Haircut Style" class="gallery-img" onerror="this.src='https://placehold.co/600x400/e5e7eb/9ca3af?text=Haircut+Style'">
+                </div>
+                <div class="fade-in-element rounded-lg overflow-hidden shadow-lg">
+                    <img src="{{ url_for('static', filename='img/fade1.jpg') }}" alt="Fade Haircut" class="gallery-img" onerror="this.src='https://placehold.co/600x400/e5e7eb/9ca3af?text=Fade+Haircut'">
+                </div>
+                <div class="fade-in-element rounded-lg overflow-hidden shadow-lg">
+                    <img src="{{ url_for('static', filename='img/beard-trim.jpg') }}" alt="Beard Trim" class="gallery-img" onerror="this.src='https://placehold.co/600x400/e5e7eb/9ca3af?text=Beard+Trim'">
+                </div>
+                <div class="fade-in-element rounded-lg overflow-hidden shadow-lg">
+                    <img src="{{ url_for('static', filename='img/product1.jpg') }}" alt="Salon Products" class="gallery-img" onerror="this.src='https://placehold.co/600x400/e5e7eb/9ca3af?text=Salon+Products'">
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
-                <h5 class="mb-3">Quick Links</h5>
-                <ul class="list-unstyled">
-                    <li class="mb-2"><a href="/" class="text-white text-decoration-none">Home</a></li>
-                    <li class="mb-2"><a href="/about" class="text-white text-decoration-none">Our Story</a></li>
-                    <li class="mb-2"><a href="/auth/login" class="text-white text-decoration-none">Admin Login</a></li>
-                </ul>
-            </div>
-            <div class="col-md-4 mb-4">
-                <h5 class="mb-3">Newsletter</h5>
-                <p>Subscribe for updates and special offers.</p>
-                <form>
-                    <div class="input-group">
-                        <input type="email" class="form-control" placeholder="Your email address">
-                        <button class="btn btn-warning" type="button">Subscribe</button>
+        </section>
+
+        <!-- Location & Hours Section -->
+        <section id="location" class="mb-12 md:mb-16">
+            <h2 class="text-2xl md:text-4xl font-bold text-center text-gray-800 mb-8 md:mb-10">Visit The Salon</h2>
+            <div class="fade-in-element bg-white p-5 md:p-8 rounded-lg shadow-lg border border-gray-200">
+                <div class="location-grid items-start">
+                    <div>
+                        <div class="mb-6">
+                            <h3 class="text-lg md:text-xl font-bold text-gray-800 mb-2">Our Address</h3>
+                            <p class="text-base md:text-lg text-gray-600">Kwabenya Aboum - Junction<br>Opposite "In Him Is Life" Supermarket<br>Accra - Ghana</p>
+                             <p class="text-xs md:text-sm text-gray-500 mt-2">📍 Convenient parking available nearby</p>
+                        </div>
+                        <div>
+                            <h3 class="text-lg md:text-xl font-bold text-gray-800 mb-3">Opening Hours</h3>
+                            <ul class="text-base md:text-lg text-gray-600 space-y-2">
+                                <li class="flex flex-wrap justify-between gap-2"><span>Monday - Friday</span> <span class="font-semibold">9:00am - 8:30pm</span></li>
+                                <li class="flex flex-wrap justify-between gap-2"><span>Saturday</span> <span class="font-semibold">9:00am - 9:00pm</span></li>
+                                <li class="flex flex-wrap justify-between gap-2"><span>Sunday</span> <span class="font-semibold text-[#ca6060]">Closed</span></li>
+                            </ul>
+                        </div>
                     </div>
-                </form>
+                    <div class="rounded-lg w-full h-64 md:h-80 overflow-hidden shadow-lg">
+                        <iframe 
+                            class="w-full h-full border-0"
+                            loading="lazy" 
+                            allowfullscreen 
+                            referrerpolicy="no-referrer-when-downgrade" 
+                            src="https://maps.google.com/maps?q=Kwabenya+Aboum+Ghana&t=&z=17&ie=UTF8&iwloc=&output=embed">
+                        </iframe>
+                    </div>
+                </div>
             </div>
-        </div>
-        <hr class="bg-light">
-        <div class="row">
-            <div class="col text-center">
-                <p class="mb-0">&copy; 2024 The Nic's Salon. All rights reserved.</p>
+        </section>
+
+        <!-- BARBERS SECTION -->
+        <section id="our-barbers" class="story-section">
+            <div class="story-container">
+                <div class="story-header">
+                    <h2>Our Story &amp; Barbers</h2>
+                    <p>Masters of the craft, united by passion and precision.</p>
+                </div>
+
+                <div class="team-grid">
+                    <!-- BARBER 1 -->
+                    <div class="person">
+                        <div class="barber-container">
+                            <img class="barber-img" 
+                                 src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=400&h=400&fit=crop&crop=faces"
+                                 alt="Master barber cutting hair"
+                                 onerror="this.src='https://randomuser.me/api/portraits/men/32.jpg'">
+                        </div>
+                        <div class="barber-divider"></div>
+                        <h3 class="barber-name">Effah Shardrack</h3>
+                        <p class="barber-title">Professional Barber</p>
+                    </div>
+
+                    <!-- BARBER 2 -->
+                    <div class="person">
+                        <div class="barber-container">
+                            <img class="barber-img" 
+                                 src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=400&h=400&fit=crop&crop=faces"
+                                 alt="Barber with scissors and comb"
+                                 onerror="this.src='https://randomuser.me/api/portraits/women/68.jpg'">
+                        </div>
+                        <div class="barber-divider"></div>
+                        <h3 class="barber-name">Kumah Shardrack</h3>
+                        <p class="barber-title">Professional Barber</p>
+                    </div>
+
+                    <!-- BARBER 3 -->
+                    <div class="person">
+                        <div class="barber-container">
+                            <img class="barber-img" 
+                                 src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=400&h=400&fit=crop&crop=faces"
+                                 alt="Barber with straight razor"
+                                 onerror="this.src='https://randomuser.me/api/portraits/men/45.jpg'">
+                        </div>
+                        <div class="barber-divider"></div>
+                        <h3 class="barber-name">The Unknown</h3>
+                        <p class="barber-title">Professional Barber</p>
+                    </div>
+                </div>
             </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq">
+            <h2 class="text-2xl md:text-4xl font-bold text-center text-gray-800 mb-8 md:mb-10">Frequently Asked Questions</h2>
+            <div class="max-w-3xl mx-auto space-y-4 px-2 md:px-0" id="faq-container"></div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-6 md:py-8 bg-[#1e1e1e] text-white">
+        <div class="container mx-auto px-4">
+            <div class="mb-4 footer-icons">
+                <!-- Facebook -->
+                <a href="#" target="_blank" rel="noopener noreferrer" class="inline-block text-white hover:text-[#ca6060] transition-colors">
+                    <svg class="w-6 h-6 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+                
+                <!-- Instagram -->
+                <a href="#" target="_blank" rel="noopener noreferrer" class="inline-block text-white hover:text-[#ca6060] transition-colors">
+                    <svg class="w-6 h-6 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.048-1.067-.06-1.407-.06-4.123v-.08c0-2.643.012-2.987.06-4.043.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772 4.902 4.902 0 011.772-1.153c.636-.247 1.363-.416 2.427-.465 1.067-.048 1.407-.06 4.123-.06h.08zM12.315 8.176a3.824 3.824 0 100 7.648 3.824 3.824 0 000-7.648zm0 6.4a2.576 2.576 0 110-5.152 2.576 2.576 0 010 5.152zm5.037-6.552a.96.96 0 11-1.92 0 .96.96 0 011.92 0z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+                
+                <!-- Twitter / X -->
+                <a href="#" target="_blank" rel="noopener noreferrer" class="inline-block text-white hover:text-[#ca6060] transition-colors">
+                    <svg class="w-6 h-6 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                    </svg>
+                </a>
+                
+                <!-- WhatsApp -->
+                <a href="#" target="_blank" rel="noopener noreferrer" class="inline-block text-white hover:text-[#ca6060] transition-colors">
+                    <svg class="w-6 h-6 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M12 2C6.48 2 2 6.48 2 12c0 2.09.63 4.03 1.71 5.66L2.5 21.5l3.84-.81A9.92 9.92 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.67 0-3.22-.46-4.55-1.25l-.32-.19-2.3.48.49-2.24-.21-.33A7.96 7.96 0 014 12c0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8zm4.33-5.27c-.18-.29-.66-.48-1.35-.67-.69-.19-1.33-.29-1.52-.29-.19 0-.37.04-.53.15-.16.11-.61.58-.74.7-.13.12-.26.13-.48.04-.22-.09-.91-.34-1.74-1.07-.65-.59-1.09-1.28-1.22-1.49-.13-.21-.01-.33.1-.44.1-.1.22-.26.33-.39.11-.13.15-.22.22-.37.07-.15.04-.28-.02-.39-.06-.11-.52-1.26-.71-1.72-.19-.45-.38-.39-.52-.4h-.45c-.15 0-.39.05-.6.25-.21.2-.79.78-.79 1.91s.82 2.22.93 2.37c.11.15 1.6 2.44 3.87 3.42.54.23.96.37 1.29.47.54.17 1.03.15 1.42.09.43-.07 1.33-.54 1.52-1.07.19-.53.19-.98.13-1.07-.06-.09-.23-.15-.48-.24z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+            </div>
+             <p class="text-sm md:text-base">&copy; 2025 The Nic's Salon. All Rights Reserved.</p>
+             <p class="text-xs md:text-sm mt-1 text-gray-400">Walk-ins Welcome | Premium Grooming in Accra</p>
         </div>
-    </div>
-</footer>
+    </footer>
 
-<!-- Cursor trail icons (visible, positioned absolutely) -->
-<i class="fas fa-cut flair" style="position: fixed; left: -100px; top: -100px;"></i>
-<i class="fas fa-scissors flair" style="position: fixed; left: -100px; top: -100px;"></i>
-<i class="fas fa-beard flair" style="position: fixed; left: -100px; top: -100px;"></i>
-<i class="fas fa-star flair" style="position: fixed; left: -100px; top: -100px;"></i>
-<i class="fas fa-crown flair" style="position: fixed; left: -100px; top: -100px;"></i>
-<i class="fas fa-magic flair" style="position: fixed; left: -100px; top: -100px;"></i>
-<i class="fas fa-sparkles flair" style="position: fixed; left: -100px; top: -100px;"></i>
-<i class="fas fa-gem flair" style="position: fixed; left: -100px; top: -100px;"></i>
-<i class="fas fa-cut flair" style="position: fixed; left: -100px; top: -100px;"></i>
-<i class="fas fa-scissors flair" style="position: fixed; left: -100px; top: -100px;"></i>
-<i class="fas fa-beard flair" style="position: fixed; left: -100px; top: -100px;"></i>
-<i class="fas fa-star flair" style="position: fixed; left: -100px; top: -100px;"></i>
-<i class="fas fa-crown flair" style="position: fixed; left: -100px; top: -100px;"></i>
-<i class="fas fa-magic flair" style="position: fixed; left: -100px; top: -100px;"></i>
-<i class="fas fa-sparkles flair" style="position: fixed; left: -100px; top: -100px;"></i>
-<i class="fas fa-gem flair" style="position: fixed; left: -100px; top: -100px;"></i>
+    <script>
+        const faqData = [
+            { question: 'Do you take appointments or are you walk-in only?', answer: "We are a walk-in-only salon. Just come on in, and we'll get you in the chair as soon as a barber is free." },
+            { question: "What services do you offer for men's hair and beards?", answer: 'We offer a full range of services, including classic haircuts, zero and skin fades, etc; just show us your desired style we would get you sorted. We also specialise in beard trims.'},
+            { question: 'Is there parking available at the salon?', answer: 'Yes, there is convenient parking available near the salon.'},
+            { question: "Do you cut children's hair?", answer: 'Yes, we are happy to cut children\'s hair! our barbers are experienced in providing a great experience for kids.'},
+            { question: 'How can I get a haircut at your salon?', answer: 'We operate on a first-come, first-served basis. Simply walk in during our business hours, and we will get you a spot as soon as we can.'},
+            { question: 'Do you sell any hair or beard products?', answer: "Yes, we have a selection of professional-grade hair and beard products available for purchase. Ask your barber for a recommendation that's perfect for your hair type and style."}
+        ];
 
-<!-- GSAP Library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+        const faqContainer = document.getElementById('faq-container');
 
-<!-- Cursor Trail Script -->
-<script>
-// the timeline
-function playAnimation(shape) {
-    let tl = gsap.timeline();
-    tl.from(shape, {
-        opacity: 0,
-        scale: 0,
-        ease: "elastic.out(1,0.3)",
-    })
-    .to(shape, {
-        rotation: "random([-360, 360])",
-    }, "<")
-    .to(shape, {
-        y: "120vh",
-        ease: "back.in(.4)",
-        duration: 1,
-    }, 0)
-}
+        function renderFaqs() {
+            faqContainer.innerHTML = faqData.map(item => `
+                <div class="faq-item fade-in-element bg-white border border-gray-200 rounded-lg shadow-lg">
+                    <button class="faq-question w-full flex justify-between items-center text-left p-4 md:p-5 focus:outline-none rounded-lg">
+                        <span class="text-sm md:text-lg font-semibold text-gray-800 pr-2">${item.question}</span>
+                        <span class="icon-plus text-xl md:text-2xl font-light transform flex-shrink-0">+</span>
+                    </button>
+                    <div class="faq-answer px-4 md:px-5">
+                        <p class="text-sm md:text-base text-gray-700 leading-relaxed pb-4">${item.answer}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            renderFaqs();
 
-// interaction props
-let gap = 100; // this number spaces the icons out
+            // Mobile menu functionality
+            const menuToggle = document.getElementById('menuToggle');
+            const mobileNav = document.getElementById('mobileNav');
+            const menuOverlay = document.getElementById('menuOverlay');
+            const closeMenu = document.getElementById('closeMenu');
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+            
+            function openMenu() {
+                mobileNav.classList.add('active');
+                menuOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            function closeMenuFunc() {
+                mobileNav.classList.remove('active');
+                menuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            
+            if (menuToggle) {
+                menuToggle.addEventListener('click', openMenu);
+            }
+            
+            if (closeMenu) {
+                closeMenu.addEventListener('click', closeMenuFunc);
+            }
+            
+            if (menuOverlay) {
+                menuOverlay.addEventListener('click', closeMenuFunc);
+            }
+            
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', closeMenuFunc);
+            });
 
-let flair = gsap.utils.toArray(".flair");
-let index = 0;
-let wrapper = gsap.utils.wrap(0, flair.length);
-gsap.defaults({duration: 1})
+            // Header scroll effect
+            const header = document.getElementById('main-header');
+            if (header) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 100) {
+                        header.classList.add('scrolled');
+                    } else {
+                        header.classList.remove('scrolled');
+                    }
+                });
+            }
 
-let mousePos = { x: 0, y: 0 };
-let lastMousePos = mousePos;
-let cachedMousePos = mousePos;
+            // FAQ accordion
+            faqContainer.addEventListener('click', e => {
+                const questionButton = e.target.closest('.faq-question');
+                if (questionButton) {
+                    const faqItem = questionButton.closest('.faq-item');
+                    if (faqItem) {
+                        faqItem.classList.toggle('active');
+                    }
+                }
+            });
 
-window.addEventListener("mousemove", (e) => {
-    mousePos = {
-        x: e.clientX,
-        y: e.clientY
-    };
-});
+            // Fade-in animation on scroll
+            const fadeElements = document.querySelectorAll('.fade-in-element');
+            const observerFade = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observerFade.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            fadeElements.forEach(el => observerFade.observe(el));
 
-gsap.ticker.add(ImageTrail);
+            // Smooth scroll for all anchor links
+            const handleSmoothScroll = (e) => {
+                const href = e.currentTarget.getAttribute('href');
+                if (!href || href === '#') return;
+                
+                const targetId = href;
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    e.preventDefault();
+                    const headerOffset = 70;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-function ImageTrail() {
-    let travelDistance = Math.hypot(
-        lastMousePos.x - mousePos.x,
-        lastMousePos.y - mousePos.y
-    );
-
-    cachedMousePos.x = gsap.utils.interpolate(
-        cachedMousePos.x || mousePos.x,
-        mousePos.x,
-        0.1
-    );
-    cachedMousePos.y = gsap.utils.interpolate(
-        cachedMousePos.y || mousePos.y,
-        mousePos.y,
-        0.1
-    );
-
-    if (travelDistance > gap) {
-        animateIcon();
-        lastMousePos = { x: mousePos.x, y: mousePos.y };
-    }
-}
-
-function animateIcon() {
-    let wrappedIndex = wrapper(index);
-    let icon = flair[wrappedIndex];
-    gsap.killTweensOf(icon);
-    
-    gsap.set(icon, {
-        clearProps: "all",
-    });
-
-    gsap.set(icon, {
-        left: mousePos.x,
-        top: mousePos.y,
-        xPercent: -50,
-        yPercent: -50,
-        fontSize: "30px",
-        color: "#DAA520",
-        opacity: 1,
-    });
-
-    playAnimation(icon);
-    index++;
-}
-</script>
-{% endblock %}
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            };
+            
+            const anchorLinks = document.querySelectorAll('a[href^="#"]');
+            anchorLinks.forEach(link => {
+                link.addEventListener('click', handleSmoothScroll);
+            });
+            
+            // Fix for the scroll-down button
+            const scrollDownBtn = document.getElementById('scroll-down-button');
+            if (scrollDownBtn) {
+                scrollDownBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const target = document.querySelector('#services');
+                    if (target) {
+                        const headerOffset = 70;
+                        const elementPosition = target.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
