@@ -1,0 +1,463 @@
+/* ========== IMPORTS ========== */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+/* ========== VARIABLES ========== */
+:root {
+    --bg-dark: #0f0f0f;
+    --bg-card: #1a1a1a;
+    --text-light: #F9F6EF;
+    --text-muted: #aaa;
+    --accent-start: #ff6b6b;
+    --accent-mid: #feca57;
+    --accent-end: #ff9ff3;
+    --gradient-text: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+    --gradient-border: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+}
+
+/* ========== BASE STYLES ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* ========== STICKY NAVIGATION - ALWAYS VISIBLE AT TOP ========== */
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    min-height: 4rem;
+    background: rgba(15, 15, 15, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    z-index: 1000;
+    border-bottom: 2px solid rgba(255,107,107,0.3);
+}
+
+/* Small nav logo - hidden by default, grows when hero is scrolled */
+.nav-logo {
+    font-size: 0;
+    font-weight: 900;
+    background: var(--gradient-text);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    letter-spacing: 2px;
+    transition: font-size 0.4s ease-out, opacity 0.4s ease-out;
+    opacity: 0;
+}
+
+/* Nav logo grows when visible */
+.nav-logo.visible {
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+    opacity: 1;
+}
+
+nav ul {
+    display: flex;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    list-style: none;
+}
+
+nav ul li a {
+    color: var(--text-light);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+    font-size: clamp(0.8rem, 3vw, 1rem);
+}
+
+nav ul li a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #ff6b6b, #feca57);
+    transition: width 0.3s ease;
+}
+
+nav ul li a:hover::after {
+    width: 100%;
+}
+
+nav ul li a:hover {
+    color: #ff6b6b;
+}
+
+/* ========== HERO SECTION ========== */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: linear-gradient(135deg, rgba(15,15,15,0.92) 0%, rgba(15,15,15,0.85) 100%),
+                url('/static/img/hero.jpg') center/cover no-repeat;
+    background-attachment: fixed;
+    text-align: center;
+    padding: 2rem;
+    margin-top: 0;
+}
+
+.hero-content {
+    max-width: 90%;
+    margin: 0 auto;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+/* Large hero logo - starts big */
+.hero-logo {
+    font-size: clamp(3rem, 12vw, 6rem);
+    font-weight: 900;
+    margin-bottom: 1rem;
+    background: var(--gradient-text);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    letter-spacing: 4px;
+    transition: all 0.5s ease-out;
+}
+
+/* When scrolled, hero logo shrinks and fades out */
+.hero-logo.scrolled {
+    font-size: 0;
+    opacity: 0;
+    margin-bottom: 0;
+    transform: translateY(-20px);
+}
+
+.hero h1 {
+    font-size: clamp(1.5rem, 6vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 2rem;
+    background: var(--gradient-text);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    transition: all 0.3s ease;
+}
+
+.action-btns {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 40px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    background: linear-gradient(135deg, #ff6b6b, #feca57);
+    color: #1a1a1a;
+    border: none;
+    font-size: clamp(0.8rem, 4vw, 1rem);
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(255,107,107,0.3);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid #ff6b6b;
+    color: #ff6b6b;
+}
+
+.btn-outline:hover {
+    background: #ff6b6b;
+    color: #1a1a1a;
+}
+
+/* ========== MAIN CONTENT ========== */
+main {
+    max-width: 75ch;
+    margin: 0 auto;
+    padding: 4rem 1.5rem;
+    position: relative;
+    z-index: 1;
+    background: var(--bg-dark);
+}
+
+main h2 {
+    font-size: clamp(1.3rem, 5vw, 2rem);
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    background: var(--gradient-text);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+main p {
+    margin-bottom: 1.5rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+    font-size: clamp(0.9rem, 3vw, 1rem);
+}
+
+.notice {
+    background: rgba(255,107,107,0.1);
+    padding: 1rem;
+    border-radius: 10px;
+    border-left: 4px solid #ff6b6b;
+    font-weight: 500;
+    margin-bottom: 2rem;
+    font-size: clamp(0.85rem, 3vw, 0.95rem);
+}
+
+.reveal {
+    background: linear-gradient(135deg, rgba(255,107,107,0.05), rgba(254,202,87,0.05));
+    padding: clamp(1rem, 4vw, 2rem);
+    border-radius: 20px;
+    margin: 2rem 0;
+    border: 1px solid rgba(255,107,107,0.2);
+}
+
+.reveal p {
+    margin-bottom: 0.5rem;
+}
+
+.closing {
+    text-align: center;
+    font-size: clamp(1rem, 4vw, 1.2rem);
+    font-weight: 500;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    color: var(--text-light);
+}
+
+/* ========== FOOTER ========== */
+.home-footer {
+    background: linear-gradient(135deg, #0a0a0a, #121212);
+    margin-top: 4rem;
+    padding: 3rem 1.5rem;
+    border-top: 1px solid rgba(255,107,107,0.2);
+}
+
+.footer-content {
+    max-width: 75ch;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.footer-logo {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+    font-weight: 900;
+    background: var(--gradient-text);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    margin-bottom: 1rem;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.footer-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-size: clamp(0.8rem, 3vw, 0.9rem);
+}
+
+.footer-links a:hover {
+    color: #ff6b6b;
+}
+
+.footer-copy {
+    color: var(--text-muted);
+    font-size: clamp(0.7rem, 2.5vw, 0.85rem);
+}
+
+/* ========== ENTRY ANIMATIONS ========== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========== MOBILE RESPONSIVENESS ========== */
+@media (max-width: 768px) {
+    nav {
+        padding: 0.8rem 1rem;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .nav-logo.visible {
+        font-size: 1.2rem;
+    }
+    
+    nav ul {
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .hero {
+        min-height: 80vh;
+        padding: 1rem;
+        margin-top: 4rem;
+    }
+    
+    .hero-logo {
+        font-size: 2.5rem;
+    }
+    
+    .hero-logo.scrolled {
+        font-size: 0;
+    }
+    
+    .hero h1 {
+        font-size: 1.5rem;
+    }
+    
+    .action-btns {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8rem;
+    }
+    
+    .btn {
+        width: 100%;
+        max-width: 200px;
+        text-align: center;
+    }
+    
+    main {
+        padding: 2rem 1rem;
+    }
+    
+    .footer-links {
+        gap: 1rem;
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-logo {
+        font-size: 2rem;
+        letter-spacing: 2px;
+    }
+    
+    .hero h1 {
+        font-size: 1.2rem;
+    }
+    
+    .btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.85rem;
+        max-width: 180px;
+    }
+    
+    nav ul {
+        gap: 0.8rem;
+    }
+    
+    nav ul li a {
+        font-size: 0.75rem;
+    }
+    
+    .notice {
+        padding: 0.8rem;
+        font-size: 0.8rem;
+    }
+    
+    .reveal {
+        padding: 1rem;
+    }
+    
+    .reveal p {
+        font-size: 0.85rem;
+    }
+    
+    .footer-links a {
+        font-size: 0.75rem;
+    }
+}
+
+/* ========== SMOOTH SCROLL BEHAVIOR ========== */
+html {
+    scroll-behavior: smooth;
+}
+
+/* ========== TABLET OPTIMIZATION ========== */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-logo {
+        font-size: 4rem;
+    }
+    
+    main {
+        padding: 3rem 2rem;
+    }
+}
+
+/* ========== LANDSCAPE MODE ON MOBILE ========== */
+@media (max-height: 600px) and (orientation: landscape) {
+    .hero {
+        min-height: 120vh;
+    }
+    
+    .hero-logo {
+        font-size: 1.8rem;
+    }
+    
+    .hero h1 {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+    }
+    
+    .action-btns {
+        flex-direction: row;
+    }
+}
+
+/* ========== TOUCH DEVICE OPTIMIZATION ========== */
+@media (hover: none) and (pointer: coarse) {
+    .btn:hover {
+        transform: none;
+    }
+}
