@@ -717,18 +717,18 @@
                 <div class="fade-in-element bg-white p-5 md:p-6 rounded-lg shadow-lg border border-gray-200">
                     <h3 class="text-xl md:text-2xl font-bold text-center text-gray-800 mb-4">Standard Cuts</h3>
                     <ul class="space-y-3 text-base md:text-lg text-gray-700">
-                        <li class="flex justify-between border-b border-gray-200 pb-2"><span>Under 15</span><span class="font-semibold">GHS 30</span></li>
-                        <li class="flex justify-between border-b border-gray-200 pb-2"><span>Over 15</span><span class="font-semibold">GHS 45</span></li>
+                        <li class="flex justify-between border-b border-gray-200 pb-2"><span>KIDS</span><span class="font-semibold">GHS 30</span></li>
+                        <li class="flex justify-between border-b border-gray-200 pb-2"><span>ADULTS</span><span class="font-semibold">GHS 45</span></li>
                         <li class="flex justify-between border-b border-gray-200 pb-2"><span>Perm Cut</span><span class="font-semibold">GHS 60</span></li>
                     </ul>
                 </div>
                 <div class="fade-in-element bg-white p-5 md:p-6 rounded-lg shadow-lg border border-gray-200">
                     <h3 class="text-xl md:text-2xl font-bold text-center text-gray-800 mb-4">Cut and Dye</h3>
                     <ul class="space-y-3 text-base md:text-lg text-gray-700">
-                        <li class="flex justify-between border-b border-gray-200 pb-2"><span>Under 15</span><span class="font-semibold">GHS 45</span></li>
-                        <li class="flex justify-between"><span>Over 15</span><span class="font-semibold">GHS 65</span></li>
+                        <li class="flex justify-between border-b border-gray-200 pb-2"><span>KIDS</span><span class="font-semibold">GHS 45</span></li>
+                        <li class="flex justify-between"><span>ADULTS</span><span class="font-semibold">GHS 65</span></li>
                         <li class="flex justify-between"><span>Beard Trim/Shave & Dye</span><span class="font-semibold">GHS 50</span></li>
-                        li class="flex justify-between"><span>Black Dye</span><span class="font-semibold">GHS 20</span></li>
+                        <li class="flex justify-between"><span>Black Dye</span><span class="font-semibold">GHS 20</span></li>
                         <li class="flex justify-between"><span>Gold Dye</span><span class="font-semibold">GHS 50</span></li>
                         <li class="flex justify-between"><span>Other Colored Dye</span><span class="font-semibold">GHS 70</span></li>
                     </ul>
@@ -751,7 +751,7 @@
                     <img src="{{ url_for('static', filename='img/interior1.jpeg') }}" alt="Salon Interior" class="gallery-img" onerror="this.src='https://placehold.co/600x400/e5e7eb/9ca3af?text=Salon+Interior'">
                 </div>
                 <div class="fade-in-element rounded-lg overflow-hidden shadow-lg">
-                    <img src="{{ url_for('static', filename='img/chair.jpg') }}" alt="Barber Chair" class="gallery-img" onerror="this.src='https://placehold.co/600x400/e5e7eb/9ca3af?text=Barber+Chair'">
+                    <img src="{{ url_for('static', filename='img/chair.jpeg') }}" alt="Barber Chair" class="gallery-img" onerror="this.src='https://placehold.co/600x400/e5e7eb/9ca3af?text=Barber+Chair'">
                 </div>
                 <div class="fade-in-element rounded-lg overflow-hidden shadow-lg">
                     <img src="{{ url_for('static', filename='img/hair-style.jpg') }}" alt="Haircut Style" class="gallery-img" onerror="this.src='https://placehold.co/600x400/e5e7eb/9ca3af?text=Haircut+Style'">
@@ -805,7 +805,7 @@
         <section id="our-barbers" class="story-section">
             <div class="story-container">
                 <div class="story-header">
-                    <h2>Our Story &amp; Barbers</h2>
+                    <h2>Our Staff &amp; Barbers</h2>
                     <p>Masters of the craft, united by passion and precision.</p>
                 </div>
 
@@ -848,6 +848,20 @@
                         <h3 class="barber-name">The Unknown</h3>
                         <p class="barber-title">Professional Barber</p>
                     </div>
+
+                    <!--  Secretary -->
+                    <div class="person">
+                        <div class="barber-container">
+                            <img class="barber-img" 
+                                 src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=400&h=400&fit=crop&crop=faces"
+                                 alt="Secretary with clipboard"
+                                 onerror="this.src='https://randomuser.me/api/portraits/women/45.jpg'">
+                        </div>
+                        <div class="barber-divider"></div>
+                        <h3 class="barber-name">Mr Francis</h3>
+                        <p class="barber-title">Secretary/Receptionist</p>
+                    </div>
+
                 </div>
             </div>
         </section>
